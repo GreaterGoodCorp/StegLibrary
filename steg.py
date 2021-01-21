@@ -12,7 +12,7 @@ def steg():
 @click.option("-c", "--compress", help="Compression level of the stegnograph", type=int, default=9)
 @click.option("-p", "--pack", help="Density of the stegnograph", type=click.Choice(["1", "2", "3"]), default="1")
 @click.option("-o", "--output", help="Path to output file", type=click.Path(False))
-@click.argument("data", type=click.Path(True, True, False))
+@click.argument("data", type=click.Path(True, True, False), required=True)
 def create(image, key, compress, pack, output, data):
     pack = int(pack)
     if image == None:
