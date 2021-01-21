@@ -14,7 +14,7 @@ def steg():
 @click.option("-p", "--pack", help="Density of the stegnograph", type=click.Choice(["1", "2", "3"]), default="1")
 @click.option("-o", "--output", help="Path to output file", type=click.Path(False))
 @click.argument("data", type=click.Path(True, True, False), required=True)
-def create(image, key, compress, pack, output, data):
+def create(image: str, key: str, compress: str, pack: str, output: str, data: str):
     pack = int(pack)
     if image == None:
         image = "images/sample.png"
@@ -27,7 +27,7 @@ def create(image, key, compress, pack, output, data):
 @click.option("-k", "--key", help="The authentication key", type=str, default=Header.default_key)
 @click.option("-o", "--output", help="Path to output file", type=click.Path(False), required=True)
 @click.argument("stegnograph", required=True, type=click.Path(True, True, False))
-def extract(key, output, stegnograph):
+def extract(key: str, output: str, stegnograph: str):
     extract_steg(stegnograph, output, key)
 
 
