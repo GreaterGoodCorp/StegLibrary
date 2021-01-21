@@ -19,7 +19,8 @@ def create(image: str, key: str, compress: str, pack: str, output: str, data: st
     if image == None:
         image = "images/sample.png"
     if output == None:
-        output = data + ".steg.png"
+        output = data.find(".", -5)
+        output = data[:output+1] + ".png"
     write_steg(data, image, key, compress, pack, output)
 
 
