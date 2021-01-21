@@ -3,6 +3,7 @@
 
 import re
 
+
 class Header:
     """Provides for the preparation of the creation of stegnographs."""
 
@@ -21,7 +22,7 @@ class Header:
     def __str__(self) -> str:
         """Returns the header."""
         return self.header
-    
+
     def __dict__(self) -> dict:
         """Returns a dictionary of all metadata."""
         return {
@@ -66,7 +67,7 @@ class Header:
     def generate(self) -> None:
         """
         Generates a header created from data given during Header initialisation.
-        
+
         There is no need to call this method, unless any metadata has been modified
         after initialisation.
         """
@@ -90,8 +91,9 @@ class Header:
         result_header = Header.signature.format(result_header)
 
         # Pad the resulting header to ensure correct length
-        result_header += Header.padding_character * (self.header_length - len(result_header))
-        
+        result_header += Header.padding_character * \
+            (self.header_length - len(result_header))
+
         # Assign as a class attribute
         self.header = result_header
 
@@ -136,7 +138,7 @@ class Header:
 
         # Generate Match object
         match = re.match(Header.pattern, header)
-        
+
         # The first capturing group is the entire header, so ignore
         # Retrieve the second capturing group
         result_dict["data_length"] = int(match[1])

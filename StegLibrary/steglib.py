@@ -2,7 +2,10 @@
 # an option to increase data density (using the two least significant bits) and
 # an option to enable password verification.
 
-import hashlib, bz2, base64, imghdr
+import hashlib
+import bz2
+import base64
+import imghdr
 from PIL import Image
 from StegLibrary import Header
 
