@@ -26,9 +26,10 @@ def create(image: str, key: str, compress: str, pack: str, output: str, data: st
 
 @steg.command("extract", help="Extract stegnograph")
 @click.option("-k", "--key", help="The authentication key", type=str, default=Header.default_key)
-@click.option("-o", "--output", help="Path to output file", type=click.Path(False), required=True)
+@click.option("-o", "--output", help="Path to output file (default is stdout)", type=click.Path(False))
 @click.argument("stegnograph", required=True, type=click.Path(True, True, False))
 def extract(key: str, output: str, stegnograph: str):
+    output = output if output else "stdout"
     extract_steg(stegnograph, output, key)
 
 
