@@ -219,6 +219,10 @@ def extract_steg(steg_file, output_file, key):
     else:
         result_data = bytes(result_data, "ascii")
 
+    # Check if output is stdout, i.e. console output
+    if output_file == "stdout":
+        print(str(result_data, "ascii"))
+
     # Write data to output file
     with open(output_file, "wb") as f:
         f.write(result_data)
