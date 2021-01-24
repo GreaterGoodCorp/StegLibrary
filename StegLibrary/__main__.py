@@ -1,4 +1,4 @@
-from StegLibrary import write_steg, extract_steg, Header
+from StegLibrary import write_steg, extract_steg, Header, check_abspath, create_abspath, split_path
 import click
 
 
@@ -17,10 +17,12 @@ def steg():
 def create(image: str, key: str, compress: str, pack: str, output: str, data: str):
     pack = int(pack)
     if image == None:
-        image = "images/sample.png"
+        image = create_abspath("images", "sample.png")
+    if not check_abspath(image):
+        image = create_abspath(split_path)
     if output == None:
         output = data.find(".", -5)
-        output = data[:output+1] + ".png"
+        output = data[:output] + ".png"
     write_steg(data, image, key, compress, pack, output)
 
 
