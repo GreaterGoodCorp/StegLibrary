@@ -1,4 +1,4 @@
-# This script implements the second version of Stegnography, which now includes
+# This script implements the second version of steganography, which now includes
 # an option to increase data density (using the two least significant bits) and
 # an option to enable password verification.
 
@@ -11,7 +11,7 @@ from StegLibrary import Header
 
 
 def write_steg(data_file: str, image_file: str, key: str, compression: int, density: int, output_file: str):
-    """Write a stegnograph
+    """Write a steganograph
 
     Args:
 
@@ -63,9 +63,9 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
     no_of_stored_bit = len(data) * 8
     if no_of_storable_bit < no_of_stored_bit:
         raise OverflowError(
-            "The storage is not big enough to perform stegnography!")
+            "The storage is not big enough to perform steganography!")
 
-    # Start writing stegnograph
+    # Start writing steganograph
     x, y, count, bit_loc = 0, 0, 0, density
     current_pix = list(pix[0, 0])
 
@@ -111,17 +111,17 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
 
 
 def extract_steg(steg_file, output_file, key):
-    """Extracts data from stegnograph.
+    """Extracts data from steganograph.
 
     Args:
 
-        steg_file (str): Path to stegnograph
+        steg_file (str): Path to steganograph
 
         output_file (str): Path to output file
 
         key (str): Authentication key
     """
-    # Load the stegnograph
+    # Load the steganograph
     im = Image.open(steg_file)
     pix = im.load()
     x_dim, y_dim = im.size
@@ -174,8 +174,8 @@ def extract_steg(steg_file, output_file, key):
     # If density is unavailable
     # i.e Not a valid header
     if density not in Header.available_density:
-        # Raise error that the stegnograph is invalid
-        raise ValueError("Invalid stegnograph")
+        # Raise error that the steganograph is invalid
+        raise ValueError("Invalid steganograph")
 
     # Retrieve data from header
     header_metadata = Header.parse(str(result_data, "ascii"))

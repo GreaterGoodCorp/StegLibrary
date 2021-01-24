@@ -1,16 +1,16 @@
 # This script defines the Header class, whose functionality is to
-# create and maintain the header of each stegnograph.
+# create and maintain the header of each steganograph.
 
 import re
 
 
 class Header:
-    """Provides for the preparation of the creation of stegnographs."""
+    """Provides for the preparation of the creation of steganographs."""
 
     signature = "S{}T"
     padding_character = "-"
     separator = "?"
-    default_key = "stegnography"
+    default_key = "steganography"
 
     metadata_length = 12
     key_hash_length = 4
@@ -42,11 +42,11 @@ class Header:
 
         Keyword arguments:
 
-        data_length -- The (compressed) length (excluding header length) of the stegnograph's data
+        data_length -- The (compressed) length (excluding header length) of the steganograph's data
 
         compression -- The level of data compression
 
-        density -- The density level of the stegnograph
+        density -- The density level of the steganograph
 
         key_hash -- The hash of the validation key
         """
