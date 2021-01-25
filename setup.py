@@ -5,7 +5,7 @@ with open("README.md", "r") as rm:
 
 setup(
     name="StegLibrary-pkg-MunchDev",
-    version="1.0.0",
+    version="0.1.0",
     author="Nguyen Thai Binh",
     author_email="binhnt.mdev@gmail.com",
     description="A package implementing and extending on steganography",
@@ -13,6 +13,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/MunchDev/StegLibrary",
     packages=find_packages(),
+    platforms=["any"],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Console",
