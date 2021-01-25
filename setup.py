@@ -4,7 +4,7 @@ with open("README.md", "r") as rm:
     full_description = rm.read()
 
 setup(
-    name="StegLibrary-pkg-MunchDev",
+    name="StegLibrary",
     version="0.1.0",
     author="Nguyen Thai Binh",
     author_email="binhnt.mdev@gmail.com",
