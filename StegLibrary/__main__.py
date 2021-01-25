@@ -2,7 +2,7 @@ from StegLibrary import write_steg, extract_steg, Header, check_abspath, create_
 import click
 
 
-@click.group()
+@click.group("StegLibrary")
 def steg():
     pass
 
