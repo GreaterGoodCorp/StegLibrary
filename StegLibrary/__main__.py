@@ -2,7 +2,7 @@ from StegLibrary import write_steg, extract_steg, Header, check_abspath, create_
 import click
 
 
-@click.group("StegLibrary")
+@click.group()
 def steg():
     pass
 
@@ -36,4 +36,6 @@ def extract(key: str, output: str, steganograph: str):
 
 
 if __name__ == "__main__":
+    import sys
+    sys.argv[0] = "StegLibrary"
     steg()
