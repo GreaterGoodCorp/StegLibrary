@@ -2,12 +2,20 @@
 # an option to increase data density (using the two least significant bits) and
 # an option to enable password verification.
 
+# Builtins
 import hashlib
 import bz2
 import base64
 import imghdr
-from PIL import Image
-from StegLibrary import Header
+
+from StegLibrary import Header, err_imp
+
+# Extra
+try:
+    from PIL import Image
+except ImportError:
+    err_imp("Pillow")
+    exit(1)
 
 
 def write_steg(data_file: str, image_file: str, key: str, compression: int, density: int, output_file: str):
@@ -107,7 +115,7 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
 
     # Save as PNG
     im.save(output_file, "png")
-    return
+    return 0
 
 
 def extract_steg(steg_file, output_file, key):
@@ -227,4 +235,4 @@ def extract_steg(steg_file, output_file, key):
     with open(output_file, "wb") as f:
         f.write(result_data)
 
-    return
+    return 0

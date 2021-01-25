@@ -1,6 +1,10 @@
-from StegLibrary import write_steg, extract_steg, Header, check_abspath, create_abspath, split_path
-import click
+from StegLibrary import write_steg, extract_steg, Header, check_abspath, create_abspath, split_path, err_imp
 
+try:
+    import click
+except ImportError:
+    err_imp("click")
+    exit(1)
 
 @click.group()
 def steg():
