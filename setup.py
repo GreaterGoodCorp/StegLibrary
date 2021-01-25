@@ -12,6 +12,10 @@ setup(
     long_description=full_description,
     long_description_content_type="text/markdown",
     url="https://github.com/MunchDev/StegLibrary",
+    install_requires=[
+        "Pillow",
+        "click",
+    ],
     packages=find_packages(),
     platforms=["any"],
     classifiers=[
