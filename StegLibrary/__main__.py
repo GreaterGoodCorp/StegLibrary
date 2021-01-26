@@ -1,10 +1,15 @@
-from StegLibrary import write_steg, extract_steg, Header, check_abspath, create_abspath, split_path, err_imp
+from StegLibrary import write_steg, extract_steg, Header, err_imp
+import os
+from os import path
 
 try:
     import click
 except ImportError:
     err_imp("click")
     exit(1)
+
+default_image = path.join("images", "sample.png")
+
 
 @click.group()
 def steg():
@@ -15,28 +20,54 @@ def steg():
 @click.option("-i", "--image", help="Path to custom image file", type=click.Path(True, True, False))
 @click.option("-k", "--key", help="The authentication key", type=str, default=Header.default_key)
 @click.option("-c", "--compress", help="Compression level of the steganograph", type=int, default=9)
-@click.option("-p", "--pack", help="Density of the steganograph", type=click.Choice(["1", "2", "3"]), default="1")
+@click.option("-p", "--pack", help="Density of the steganograph (from 1 to 3)", type=int, default=1)
 @click.option("-o", "--output", help="Path to output file", type=click.Path(False))
 @click.argument("data", type=click.Path(True, True, False), required=True)
-def create(image: str, key: str, compress: str, pack: str, output: str, data: str):
-    pack = int(pack)
+def create(image: str, key: str, compress: int, pack: int, output: str, data: str):
+    if pack not in Header.available_density:
+        raise click.exceptions.BadOptionUsage(
+            "pack", "Density must be from 1 to 3!")
+
     if image == None:
-        image = create_abspath("images", "sample.png")
-    if not check_abspath(image):
-        image = create_abspath(split_path)
+        # Get the absolute path for the default image
+        image = path.abspath(path.dirname(__file__))
+        image = path.join(image, default_image)
+    elif not path.isabs(image):
+        # Get the absolute path for the user-specified image
+        image = path.join(os.getcwd(), *path.split(image))
+
+    if not path.isabs(data):
+        # Get the absolute path for the user-specified data file
+        data = path.join(os.getcwd(), *path.split(data))
+
     if output == None:
-        output = data.find(".", -5)
-        output = data[:output] + ".png"
+        # Get the absolute path for the default output file
+        # Default is the name of data file, change extension to .png
+        name_no_ext = path.splitext(data)[0]
+        output = name_no_ext + ".png"
+    elif not path.isabs(output):
+        # Get the absolute path for the user-specified output file
+        output = path.join(os.getcwd(), *path.split(output))
+
     write_steg(data, image, key, compress, pack, output)
 
 
 @steg.command("extract", help="Extract steganograph")
 @click.option("-k", "--key", help="The authentication key", type=str, default=Header.default_key)
-@click.option("-o", "--output", help="Path to output file (default is stdout)", type=click.Path(False))
+@click.option("-o", "--output", help="Path to output file", type=click.Path(False))
+@click.option("-s", "--stdout", help="Additionally output to stdout", type=bool, default=False)
 @click.argument("steganograph", required=True, type=click.Path(True, True, False))
-def extract(key: str, output: str, steganograph: str):
-    output = output if output else "stdout"
-    extract_steg(steganograph, output, key)
+def extract(key: str, output: str, stdout: bool, steganograph: str):
+    if not path.isabs(steganograph):
+        # Get the absolute path for the steganograph
+        steganograph = path.join(os.getcwd(), *path.split(steganograph))
+
+    if output == None:
+        # Get the absolute path of the default output file
+        # Default is the name of the steganograph, extension-stripped
+        output = path.splitext(steganograph)[0]
+
+    extract_steg(steganograph, output, key, std=stdout)
 
 
 if __name__ == "__main__":
