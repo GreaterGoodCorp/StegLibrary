@@ -39,3 +39,14 @@ cd StegLibrary
 python3 -m pip install --upgrade pip
 pip3 install -r requirements.txt
 ```
+
+## Usage
+
+### Windows
+
+The script can be used directly by executing:
+
+```
+python -m StegLibrary
+```
+
