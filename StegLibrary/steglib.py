@@ -48,16 +48,16 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
 
     # Compress data (if needed)
     if compression > 0:
-        data = str(base64.b64encode(bz2.compress(data, compression)), "ascii")
+        data = str(base64.b64encode(bz2.compress(data, compression)), "utf-8")
     else:
-        data = str(data, "ascii")
+        data = str(data, "utf-8")
 
     # Create header and append header
     header = Header(len(data), compression, density, key).header
     data = header + data
 
     # Serialise data
-    data = bytes(data, "ascii")
+    data = bytes(data, "utf-8")
 
     # Retrieve metadata of the image
     im = Image.open(image_file)
@@ -114,11 +114,11 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
                     current_pix = list(pix[x, y])
 
     # Save as PNG
-    im.save(output_file, "png")
+    im.save(output_file)
     return 0
 
 
-def extract_steg(steg_file, output_file, key):
+def extract_steg(steg_file, output_file, key, **kwargs):
     """Extracts data from steganograph.
 
     Args:
@@ -168,7 +168,7 @@ def extract_steg(steg_file, output_file, key):
             result_data += byte.to_bytes(1, "big")
         # If header is invalid
         try:
-            str(result_data, "ascii")
+            str(result_data, "utf-8")
         except:
             # Switch to the next possible density
             # Reset all values to original
@@ -186,7 +186,7 @@ def extract_steg(steg_file, output_file, key):
         raise ValueError("Invalid steganograph")
 
     # Retrieve data from header
-    header_metadata = Header.parse(str(result_data, "ascii"))
+    header_metadata = Header.parse(str(result_data, "utf-8"))
 
     # Calculate key hash
     key_hash = hashlib.md5(key.encode()).hexdigest()[:Header.key_hash_length]
@@ -215,21 +215,22 @@ def extract_steg(steg_file, output_file, key):
         result_data += byte.to_bytes(1, "big")
 
     # Turn to string to strip header later
-    result_data = str(result_data, "ascii")
+    result_data = str(result_data, "utf-8")
 
     # Strip header
     result_data = result_data[Header.header_length:]
 
     # If compressed, decompress
     if header_metadata["compression"] > 0:
+        result_data = result_data[:result_data.find("=", -2)] + "=="
         result_data = bz2.decompress(
-            base64.b64decode(bytes(result_data, "ascii")))
+            base64.b64decode(bytes(result_data, "utf-8")))
     else:
-        result_data = bytes(result_data, "ascii")
+        result_data = bytes(result_data, "utf-8")
 
-    # Check if output is stdout, i.e. console output
-    if output_file == "stdout":
-        print(str(result_data, "ascii"))
+    # Check if stdout is enabled then write
+    if kwargs.get("std", None) == "stdout":
+        print(str(result_data, "utf-8"))
 
     # Write data to output file
     with open(output_file, "wb") as f:
