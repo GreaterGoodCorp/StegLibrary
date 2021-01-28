@@ -85,7 +85,7 @@ def preprocess_data_file(data_file: str):
     * Positional arguments:
 
     data_file -- Path to data file
-    
+
     * Returns:
 
     Binary data (as bytes) of the data file
@@ -180,7 +180,7 @@ def write_output_data(data: bytes, output_file: str):
     Writes binary data to output file.
 
     * Positional arguments:
-    
+
     data -- Binary data to be written
 
     output_file -- Path to output file
@@ -285,7 +285,7 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
     # Next, depending on the density, find the maximum number
     # of bits can be stored
     no_of_storable_bit = no_of_rgb * density
-    # Finally, find the number of bits to be stored by 
+    # Finally, find the number of bits to be stored by
     # multiplying by 8 (1 byte contains 8 bit)
     no_of_stored_bit = len(data) * 8
 
@@ -353,7 +353,7 @@ def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = Fals
     Extracts data from steganograph.
 
     * Positional arguments:
-    
+
     steg_file -- Path to steganograph
 
     output_file -- Path to output file
@@ -491,7 +491,7 @@ def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = Fals
     # If compressed (as indicated by the header), decompress it
     if header_metadata["compression"] > 0:
         # NOTE: This is a temporary fix as mentioned in the issue
-        # The last few bits are read improbably, hence the 
+        # The last few bits are read improbably, hence the
         # base64 padding is wrong
         # This part removes the invalid padding and append
         # a valid one.
