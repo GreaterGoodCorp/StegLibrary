@@ -76,3 +76,16 @@ class DataFileValidationError(SteganographyError):
             return str(self.inner_error)
         else:
             return DataFileValidationError.all_errors[self.error_type]
+
+class InsufficientStorageError(SteganographyError):
+    """
+    This class inherits from the base Steganography class.
+
+    Raised when there is insufficient storage to store data in the image file.
+    """
+
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
+    def __str__(self) -> str:
+        return "There is insufficient storage in image file."
