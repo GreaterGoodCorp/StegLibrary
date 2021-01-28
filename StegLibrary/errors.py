@@ -65,6 +65,6 @@ class DataFileValidationError(SteganographyError):
 
     def __str__(self) -> str:
         if self.error_type == "IO":
-            return self.inner_error
+            return str(self.inner_error)
         else:
             return DataFileValidationError.all_errors[self.error_type]
