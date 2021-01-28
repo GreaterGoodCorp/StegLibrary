@@ -54,7 +54,7 @@ def validate_image_file(image_file: str):
     return True
 
 
-def validate_data_file(data_file: str):
+def validate_data_file(data_file: str) -> bool:
     """
     Validates data file by checking its availability.
 
@@ -78,7 +78,7 @@ def validate_data_file(data_file: str):
     return True
 
 
-def preprocess_data_file(data_file: str):
+def preprocess_data_file(data_file: str) -> bytes:
     """
     Pre-processes data file by reading and checking integrity.
 
@@ -120,7 +120,7 @@ def preprocess_data_file(data_file: str):
     return data
 
 
-def retrieve_image(image_file: str):
+def retrieve_image(image_file: str) -> Image:
     """
     Retrieves the image from image file.
 
@@ -157,7 +157,7 @@ def retrieve_image(image_file: str):
     return image
 
 
-def check_file_availability(file: str):
+def check_file_availability(file: str) -> bool:
     """
     Checks if file exists already.
 
@@ -175,7 +175,7 @@ def check_file_availability(file: str):
     return True
 
 
-def write_output_data(data: bytes, output_file: str):
+def write_output_data(data: bytes, output_file: str) -> bool:
     """
     Writes binary data to output file.
 
@@ -213,7 +213,7 @@ def write_output_data(data: bytes, output_file: str):
     return True
 
 
-def write_steg(data_file: str, image_file: str, key: str, compression: int, density: int, output_file: str):
+def write_steg(data_file: str, image_file: str, key: str, compression: int, density: int, output_file: str) -> bool:
     """Write a steganograph
 
     * Positional arguments:
@@ -348,7 +348,7 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
     return 0
 
 
-def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = False):
+def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = False) -> bool:
     """
     Extracts data from steganograph.
 
