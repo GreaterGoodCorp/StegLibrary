@@ -44,7 +44,7 @@ def validate_image_file(image_file: str):
         raise ImageFileValidationError("FileNotFound")
     # Make sure the image is in Portable Network Graphics (PNG) format
     # by checking the magic header (use of a builtin library)
-    if imghdr.what != "png":
+    if imghdr.what(image_file) != "png":
         # If file is not a PNG file
         # e.g return value is None for non-images
         # or the type of image
