@@ -38,3 +38,23 @@ class ImageFileValidationError(SteganographyError):
 
     def __str__(self) -> str:
         return ImageFileValidationError.all_errors[self.error_type]
+
+class DataFileValidationError(SteganographyError):
+    """
+    This class inherits from the base Steganography class.
+
+    Raised when there is an error during the data file validation process.
+    """
+    all_errors = {
+        "FileNotFound": "The data file specified is not found",
+    }
+
+    def __init__(self, error_type, *args: object) -> None:
+        super().__init__(*args)
+        if error_type not in DataFileValidationError.all_errors:
+            raise SteganographyError(
+                True, DataFileValidationError, "The specified error type is invalid")
+        self.error_type = error_type
+
+    def __str__(self) -> str:
+        return DataFileValidationError.all_errors[self.error_type]
