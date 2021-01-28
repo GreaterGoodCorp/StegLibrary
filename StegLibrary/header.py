@@ -3,6 +3,7 @@
 
 import re
 import hashlib
+from StegLibrary.errors import HeaderError
 
 class Header:
     """Provides for the preparation of the creation of steganographs."""
@@ -65,12 +66,17 @@ class Header:
         density -- The density level of the steganograph
 
         key_hash -- The hash of the validation key
+
+        * Raises:
+
+        HeaderError: Raised when the density requested is invalid
         """
         self.data_length = data_length
         self.compression = compression
 
+        # Check if the requested density is allowed
         if density not in Header.available_density:
-            raise ValueError("The density request is not available!")
+            raise HeaderError("InvalidDensity")
         self.density = density
 
         # Generate key hash with required length from key
@@ -141,6 +147,10 @@ class Header:
         header -- Header to be parsed
 
         key -- Validation key
+
+        * Raises:
+
+        HeaderError: Raised when header validation/parsing fails
         """
         result_dict = {
             "data_length": None,
@@ -151,7 +161,7 @@ class Header:
 
         # Validate header
         if not Header.validate(header):
-            raise ValueError("Header is invalid!")
+            raise HeaderError("InvalidFormat")
 
         # Generate Match object
         match = re.match(Header.pattern, header)
@@ -171,7 +181,7 @@ class Header:
         # Validate key hash
         key_hash = hashlib.md5(key.encode()).hexdigest()[:Header.key_hash_length]
         if key_hash != result_dict["key_hash"]:
-            raise ValueError("Authentication key does not match!")
+            raise HeaderError("AuthError")
 
         # Return the resulting dictionary
         return result_dict
