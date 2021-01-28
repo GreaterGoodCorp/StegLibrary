@@ -306,59 +306,90 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
     return 0
 
 
-def extract_steg(steg_file, output_file, key, **kwargs):
-    """Extracts data from steganograph.
-
-    Args:
-
-        steg_file -- Path to steganograph
-
-        output_file -- Path to output file
-
-        key -- Authentication key
+def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = False):
     """
-    # Load the steganograph
-    im = Image.open(steg_file)
-    pix = im.load()
-    x_dim, y_dim = im.size
+    Extracts data from steganograph.
+
+    * Positional arguments:
+    
+    steg_file -- Path to steganograph
+
+    output_file -- Path to output file
+
+    key -- Authentication key
+
+    stdout -- Send output to sys.stdout
+
+    * Returns:
+
+    True if the steganograph is extracted and written to disk successfully
+
+    * Raises:
+
+
+    """
+
+    # Validate the steganograph
+    validate_image_file(steg_file)
+
+    # Check availability of output file
+    check_file_availability(output_file)
+
+    # Retrieve image data
+    image = retrieve_image(steg_file)
+
+    # Load the steganograph and its metadata
+    image = Image.open(steg_file)
+    pix = image.load()
+    y_dim = image.size[1]
+
+    # Declare some local variables as the extraction starts
     x, y, count = 0, 0, 0
     result_data = b""
-
     density = 1
     bit_loc = density
-    # Since the density is unknown, check all density
-    # Attempt to retrieve the header
+
+    # Firstly, the header is retrieved by reading for its known length.
+    # Since the density is unknown, check all density one by one.
     while density in Header.available_density:
         bit_loc = density
         while len(result_data) < Header.header_length:
             byte = 0
             # Read every single bit
-            # Mechanism is the same as the writing
+            # Iterate through every single bit of the byte
             for i in range(8):
                 # If bit is set, set the corressponding bit of 'byte'
                 if pix[x, y][count] & (1 << bit_loc):
                     byte += (1 << (7 - i))
+                
+                # move to the next bit by decrement bit index
                 bit_loc -= 1
-                # If all readable bits are consumed
+                # If all readable bits of the colour integer are consumed
                 if bit_loc == -1:
-                    # Move to the next RGB
+                    # Move to the next RGB and reset the bit index
                     count += 1
                     bit_loc = density
-                    # If all RGB are consume
+                    # If the entire pixel is read
                     if count == 3:
-                        # Move to the next byte
+                        # Move to the next pixel in the row and reset the count
                         count = 0
                         y += 1
+                        # If the entire row of pixels is read
                         if y == y_dim:
+                            # Move to the next row and reset row index
                             y = 0
                             x += 1
-            # Convert the single byte to bytes
+            # Convert the single byte (integer) to bytes
+            # By design, the resulting data is strictly stored in 1 byte
+            # and endianness does not matter since it is only 1 byte
             result_data += byte.to_bytes(1, "big")
         # If header is invalid
+        # e.g wrong density
         try:
+            # Invalid header has undecodable byte
             str(result_data, "utf-8")
         except:
-            # Switch to the next possible density
+            # Hence, switch to the next possible density
             # Reset all values to original
             density += 1
             result_data = b""
@@ -368,7 +399,7 @@ def extract_steg(steg_file, output_file, key, **kwargs):
             break
 
     # If density is unavailable
-    # i.e Not a valid header
+    # i.e Not a valid header -> Invalid steganograph
     if density not in Header.available_density:
         # Raise error that the steganograph is invalid
         raise ValueError("Invalid steganograph")
@@ -410,7 +441,7 @@ def extract_steg(steg_file, output_file, key, **kwargs):
         result_data = bytes(result_data, "utf-8")
 
     # Check if stdout is enabled then write
-    if kwargs.get("std", None) == "stdout":
+    if stdout:
         print(str(result_data, "utf-8"))
 
     # Write data to output file
