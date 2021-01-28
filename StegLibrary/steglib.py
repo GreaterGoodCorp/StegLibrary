@@ -3,10 +3,12 @@
 # an option to enable password verification.
 
 # Builtins
+from StegLibrary.errors import ImageFileValidationError
 import hashlib
 import bz2
 import base64
 import imghdr
+from os import path
 
 from StegLibrary import Header, err_imp
 
@@ -17,6 +19,32 @@ except ImportError:
     err_imp("Pillow")
     exit(1)
 
+def validate_image_file(image_file: str):
+    """
+    Validate the (path to) image file
+
+    Args:
+
+        image_file (str): Path to image file
+
+    Raises:
+
+        ImageFileValidationError: Raised when the validation fails
+    """
+    # Make sure the path to image file exist, and it must be a file
+    if not path.isfile(image_file):
+        # If file does not exist, raise exception
+        raise ImageFileValidationError("FileNotFound")
+    # Make sure the image is in Portable Network Graphics (PNG) format
+    # by checking the magic header (use of a builtin library)
+    if imghdr.what != "png":
+        # If file is not a PNG file
+        # e.g return value is None for non-images
+        # or the type of image
+        raise ImageFileValidationError("NotImageFile")
+
+    # Return True as a signal that the validation has been run and succeeded
+    return True
 
 def write_steg(data_file: str, image_file: str, key: str, compression: int, density: int, output_file: str):
     """Write a steganograph
@@ -35,9 +63,9 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
 
         output_file (str): Path to output file
     """
-    # Check if the image is PNG.
-    if imghdr.what(image_file) != "png":
-        raise ValueError("The image provided must be PNG!")
+
+    # Validate the (path to image file)
+    validate_image_file(image_file)
 
     # Read the binary data
     with open(data_file, "rb") as f:
