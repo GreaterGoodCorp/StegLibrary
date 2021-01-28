@@ -79,6 +79,21 @@ def validate_data_file(data_file: str):
 
 
 def preprocess_data_file(data_file: str):
+    """
+    Pre-processes data file by reading and checking integrity.
+
+    * Positional arguments:
+
+    data_file -- Path to data file
+    
+    * Returns:
+
+    Binary data (as bytes) of the data file
+
+    * Raises:
+
+    DataFileValidationError: Raised when data file is unreadable or corrupted
+    """
     # Perform validation again
     # just in case when the validation is not called
     validate_data_file(data_file)
@@ -220,15 +235,27 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
     x_dim, y_dim = image.size
 
     # Check if the image has enough room to store data
+    # First find the number of writable pixels
     no_of_pixel = x_dim * y_dim
+    # Then, the number of colour codes by multyplying by 3
+    # since each pixel contains 3 integers
     no_of_rgb = no_of_pixel * 3
+    # Next, depending on the density, find the maximum number
+    # of bits can be stored
     no_of_storable_bit = no_of_rgb * density
+    # Finally, find the number of bits to be stored by 
+    # multiplying by 8 (1 byte contains 8 bit)
     no_of_stored_bit = len(data) * 8
+
+    # Make sure there are enough space to store all bits
     if no_of_storable_bit < no_of_stored_bit:
+        # If there are not enough, raise error
         raise InsufficientStorageError()
 
     # Start writing steganograph
+    # Declare usable variables as pointer to bit being written
     x, y, count, bit_loc = 0, 0, 0, density
+    # Declare a local variable for pixel to reduce look-up time
     current_pix = list(pix[0, 0])
 
     # Firstly, iterate through all the bytes to be written
@@ -250,21 +277,28 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
                     current_pix[count] -= 1 << bit_loc
 
             # Move to the next bit
+            # by decrementing index
             bit_loc -= 1
             # If reached the final bit
             if bit_loc == -1:
-                # Move to the next RGB
+                # Move to the next integer
+                # by incrementing the count
                 count += 1
+                # Reset density
                 bit_loc = density
                 # If reached the last RGB
                 if count == 3:
-                    # Save pixel and move to the next pixel
+                    # Save pixel
                     pix[x, y] = tuple(current_pix)
+                    # Reset count
                     count = 0
                     y += 1
+                    # If the entire row of pixel is written
                     if y == y_dim:
+                        # Move on to the next row and reset
                         y = 0
                         x += 1
+                    # Request new pixel to be written
                     current_pix = list(pix[x, y])
 
     # Save as PNG
