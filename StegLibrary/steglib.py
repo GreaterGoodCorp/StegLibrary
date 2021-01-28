@@ -47,6 +47,50 @@ def validate_image_file(image_file: str):
     # Return True as a signal that the validation has been run and succeeded
     return True
 
+def validate_data_file(data_file: str):
+    """
+    Validate the (path to) data file
+
+    Args:
+
+        data_file (str): Path to data file
+
+    Raises:
+
+        DataFileValidationError: Raised when the validation fails
+    """
+    # Make sure the path to data file exist, and it must be a file
+    if not path.isfile(data_file):
+        raise DataFileValidationError("FileNotFound")
+
+    # Return True as a signal that the validation has been run and succeeded
+    return True
+
+def preprocess_data_file(data_file: str):
+    # Perform validation again
+    # just in case when the function is not called
+    validate_data_file(data_file)
+
+    # Perform read operation on data file
+    # Read in binary mod (rb) in order to correctly parse
+    # binary data
+    data = None
+    try:
+        # Attempt to perform operation
+        with open(data_file, "rb") as file:
+            data = file.read()
+    except OSError as e:
+        # If failed, wrap the original error inside custom error
+        # for compatibility
+        raise DataFileValidationError("IO", e)
+
+    # Perform data validation
+    if data == None or len(data) == 0:
+        # If data is empty, raise error
+        raise DataFileValidationError("EmptyFile")
+
+    # Return data if all checks are good to go
+
 def write_steg(data_file: str, image_file: str, key: str, compression: int, density: int, output_file: str):
     """Write a steganograph
 
@@ -65,12 +109,12 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
         output_file (str): Path to output file
     """
 
-    # Validate the (path to image file)
+    # Validate the (path to) image file and data file
     validate_image_file(image_file)
+    validate_data_file(data_file)
 
-    # Read the binary data
-    with open(data_file, "rb") as f:
-        data = f.read()
+    # Pre-process data file and read data
+    data = preprocess_data_file(data_file)
 
     # Calculate key hash
     key = hashlib.md5(key.encode()).hexdigest()[:Header.key_hash_length]
