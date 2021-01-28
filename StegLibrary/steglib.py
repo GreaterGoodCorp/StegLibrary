@@ -222,7 +222,7 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
     # Check if the image has enough room to store data
     no_of_pixel = x_dim * y_dim
     no_of_rgb = no_of_pixel * 3
-    no_of_storable_bit = no_of_rgb * compression
+    no_of_storable_bit = no_of_rgb * density
     no_of_stored_bit = len(data) * 8
     if no_of_storable_bit < no_of_stored_bit:
         raise InsufficientStorageError()
