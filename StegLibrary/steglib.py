@@ -3,14 +3,15 @@
 # an option to enable password verification.
 
 # Builtins
-from StegLibrary.errors import ImageFileValidationError
 import hashlib
 import bz2
 import base64
 import imghdr
 from os import path
 
-from StegLibrary import Header, err_imp
+from StegLibrary import Header
+from StegLibrary.errors import *
+from StegLibrary.helper import err_imp
 
 # Extra
 try:
