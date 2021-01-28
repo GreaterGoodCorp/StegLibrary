@@ -211,7 +211,9 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
     validate_data_file(data_file)
 
     # Check file availability
-    check_file_availability(output_file)
+    if not check_file_availability(output_file):
+        # If file is already taken, raise error
+        raise UnavailableFileError()
 
     # Pre-process data file and read data
     data = preprocess_data_file(data_file)
@@ -333,7 +335,9 @@ def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = Fals
     validate_image_file(steg_file)
 
     # Check availability of output file
-    check_file_availability(output_file)
+    if not check_file_availability(output_file):
+        # If file is already taken, raise error
+        raise UnavailableFileError()
 
     # Retrieve image data
     image = retrieve_image(steg_file)
