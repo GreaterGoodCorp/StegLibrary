@@ -165,6 +165,8 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
 
     DataFileValidationError: Raised when data validation failed
 
+    InsufficientStorageError: Raised when there is insufficient storage
+
     * Returns:
 
     True if a stegnograph has been successfully created and written on disks
@@ -202,8 +204,7 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
     no_of_storable_bit = no_of_rgb * compression
     no_of_stored_bit = len(data) * 8
     if no_of_storable_bit < no_of_stored_bit:
-        raise OverflowError(
-            "The storage is not big enough to perform steganography!")
+        raise InsufficientStorageError()
 
     # Start writing steganograph
     x, y, count, bit_loc = 0, 0, 0, density
