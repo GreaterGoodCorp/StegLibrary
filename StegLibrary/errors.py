@@ -97,11 +97,29 @@ class HeaderError(SteganographyError):
     Raised when there is insufficient storage to store data in the image file.
     """
 
-    def __init__(self, *args: object) -> None:
+    all_errors = {
+        "InvalidFormat": "The header is invalid.",
+        "InvalidDensity": "The data file is empty or unreadable.",
+        "AuthError": "Authentication key does not match."
+    }
+
+    def __init__(self, error_type, *args: object) -> None:
         super().__init__(*args)
+        if error_type not in DataFileValidationError.all_errors:
+            raise SteganographyError(
+                True, DataFileValidationError, "The specified error type is invalid")
+        self.error_type = error_type
+        if error_type == "IO":
+            if len(args) == 0:
+                raise SteganographyError(
+                    True, DataFileValidationError, "Missing information")
+        self.inner_error = args[0]
 
     def __str__(self) -> str:
-        return "The header is invalid! Possible file corruption."
+        if self.error_type == "IO":
+            return str(self.inner_error)
+        else:
+            return DataFileValidationError.all_errors[self.error_type]
 
 
 class UnavailableFileError(SteganographyError):
