@@ -67,7 +67,7 @@ def extract(key: str, output: str, stdout: bool, steganograph: str):
         # Default is the name of the steganograph, extension-stripped
         output = path.splitext(steganograph)[0]
 
-    extract_steg(steganograph, output, key, std=stdout)
+    extract_steg(steganograph, output, key, stdout)
 
 
 if __name__ == "__main__":

@@ -2,21 +2,38 @@
 # create and maintain the header of each steganograph.
 
 import re
-
+import hashlib
+from StegLibrary.errors import HeaderError
 
 class Header:
     """Provides for the preparation of the creation of steganographs."""
 
+    # Signature for the header
+    # Serve mainly as a decoration for now
     signature = "S{}T"
+
+    # Padding character, used when header is too short
+    # after writing all the required metadata
     padding_character = "-"
+
+    # Separator is used to make regex easier
     separator = "?"
+
+    # A default authentication key
+    # To meet the API requirement
     default_key = "steganography"
 
+    # Various types of length for the header
     metadata_length = 12
     key_hash_length = 4
     header_length = metadata_length + key_hash_length
+
+    # Available density for steganograph
     available_density = (1, 2, 3)
 
+    # Regex pattern of the header
+    # TODO: Make a function to generate pattern on-demand
+    # when the header structure changes
     pattern = r"^S(\d{1,6})\?([a-f\d]{2})\?([a-f\d]{4})T-*$"
 
     def __str__(self) -> str:
@@ -29,18 +46,18 @@ class Header:
             "data_length": self.data_length,
             "compression": self.compression,
             "density": self.density,
-            "key_hash": self.key_hash,
+            "key": self.key,
         }
 
     def __repr__(self) -> str:
         """Same as __str__, returns the header."""
         return str(self)
 
-    def __init__(self, data_length: int, compression: int, density: int, key_hash: str) -> None:
+    def __init__(self, data_length: int, compression: int, density: int, key: str) -> None:
         """
         Initilises a Header instance.
 
-        Keyword arguments:
+        * Positional arguments:
 
         data_length -- The (compressed) length (excluding header length) of the steganograph's data
 
@@ -49,19 +66,23 @@ class Header:
         density -- The density level of the steganograph
 
         key_hash -- The hash of the validation key
+
+        * Raises:
+
+        HeaderError: Raised when the density requested is invalid
         """
         self.data_length = data_length
         self.compression = compression
 
+        # Check if the requested density is allowed
         if density not in Header.available_density:
-            raise ValueError("The density request is not available!")
+            raise HeaderError("InvalidDensity")
         self.density = density
 
-        if len(key_hash) != Header.key_hash_length:
-            raise ValueError(
-                f"The length of the key hash does not match requirements: {Header.key_hash_length}")
-        self.key_hash = key_hash
+        # Generate key hash with required length from key
+        self.key_hash = hashlib.md5(key.encode()).hexdigest()[:Header.key_hash_length]
 
+        # Generate header
         self.generate()
 
     def generate(self) -> None:
@@ -102,7 +123,7 @@ class Header:
         """
         Validates if header is valid.
 
-        Keyword argument:
+        * Positional arguments:
 
         header -- Header to be validated
         """
@@ -117,13 +138,19 @@ class Header:
         return False
 
     @staticmethod
-    def parse(header: str) -> dict:
+    def parse(header: str, key: str) -> dict:
         """
         Parses header into original metadata.
 
-        Keyword argument:
+        * Positional arguments:
 
         header -- Header to be parsed
+
+        key -- Validation key
+
+        * Raises:
+
+        HeaderError: Raised when header validation/parsing fails
         """
         result_dict = {
             "data_length": None,
@@ -134,7 +161,7 @@ class Header:
 
         # Validate header
         if not Header.validate(header):
-            raise ValueError("Header is invalid!")
+            raise HeaderError("InvalidFormat")
 
         # Generate Match object
         match = re.match(Header.pattern, header)
@@ -150,6 +177,11 @@ class Header:
         flag = int(mixer[2:4])
         result_dict["density"] = flag & 0b11
         result_dict["compression"] = (flag - (flag & 0b11)) >> 2
+
+        # Validate key hash
+        key_hash = hashlib.md5(key.encode()).hexdigest()[:Header.key_hash_length]
+        if key_hash != result_dict["key_hash"]:
+            raise HeaderError("AuthError")
 
         # Return the resulting dictionary
         return result_dict
