@@ -7,16 +7,32 @@ import hashlib
 class Header:
     """Provides for the preparation of the creation of steganographs."""
 
+    # Signature for the header
+    # Serve mainly as a decoration for now
     signature = "S{}T"
+
+    # Padding character, used when header is too short
+    # after writing all the required metadata
     padding_character = "-"
+
+    # Separator is used to make regex easier
     separator = "?"
+
+    # A default authentication key
+    # To meet the API requirement
     default_key = "steganography"
 
+    # Various types of length for the header
     metadata_length = 12
     key_hash_length = 4
     header_length = metadata_length + key_hash_length
+
+    # Available density for steganograph
     available_density = (1, 2, 3)
 
+    # Regex pattern of the header
+    # TODO: Make a function to generate pattern on-demand
+    # when the header structure changes
     pattern = r"^S(\d{1,6})\?([a-f\d]{2})\?([a-f\d]{4})T-*$"
 
     def __str__(self) -> str:
@@ -40,7 +56,7 @@ class Header:
         """
         Initilises a Header instance.
 
-        Keyword arguments:
+        * Positional arguments:
 
         data_length -- The (compressed) length (excluding header length) of the steganograph's data
 
@@ -60,6 +76,7 @@ class Header:
         # Generate key hash with required length from key
         self.key_hash = hashlib.md5(key.encode()).hexdigest()[:Header.key_hash_length]
 
+        # Generate header
         self.generate()
 
     def generate(self) -> None:
@@ -100,7 +117,7 @@ class Header:
         """
         Validates if header is valid.
 
-        Keyword argument:
+        * Positional arguments:
 
         header -- Header to be validated
         """
@@ -119,7 +136,7 @@ class Header:
         """
         Parses header into original metadata.
 
-        Keyword argument:
+        * Positional arguments:
 
         header -- Header to be parsed
 
