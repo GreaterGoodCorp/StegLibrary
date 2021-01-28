@@ -238,6 +238,8 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
 
     InsufficientStorageError: Raised when there is insufficient storage
 
+    UnavailableFileError: Raised when the output file already exists
+
     * Returns:
 
     True if a stegnograph has been successfully created and written on disks
@@ -366,6 +368,7 @@ def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = Fals
 
     * Raises:
 
+    HeaderError: Raised when the header of the stegnograph is invalid
 
     """
 
@@ -403,8 +406,7 @@ def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = Fals
                 # If bit is set, set the corressponding bit of 'byte'
                 if pix[x, y][count] & (1 << bit_loc):
                     byte += (1 << (7 - i))
-                
-                # move to the next bit by decrement bit index
+                # Move to the next bit by decrement bit index
                 bit_loc -= 1
                 # If all readable bits of the colour integer are consumed
                 if bit_loc == -1:
@@ -447,46 +449,68 @@ def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = Fals
         raise ValueError("Invalid steganograph")
 
     # Retrieve data from header
+    # Note, HeaderError will be raised if parsing is not done
     header_metadata = Header.parse(str(result_data, "utf-8"), key)
 
     # Attempt to read the remaining data
-    # Mechanism is same as above
+    # Continue with the result variable already containing the header
+    # which will be stripped later
     while len(result_data) < header_metadata["data_length"] + Header.header_length:
         byte = 0
+        # Read every single bit
+        # Iterate through every single bit of the byte
         for i in range(8):
+            # If bit is set, set the corressponding bit of 'byte'
             if pix[x, y][count] & (1 << bit_loc):
                 byte += (1 << (7 - i))
+            # Move to the next bit by decrement bit index
             bit_loc -= 1
+            # If all readable bits of the colour integer are consumed
             if bit_loc == -1:
+                # Move to the next RGB and reset the bit index
                 count += 1
                 bit_loc = density
+                # If the entire pixel is read
                 if count == 3:
+                    # Move to the next pixel in the row and reset the count
                     count = 0
                     y += 1
+                    # If the entire row of pixels is read
                     if y == y_dim:
+                        # Move to the next row and reset row index
                         y = 0
                         x += 1
+        # Convert the single byte (integer) to bytes
+        # By design, the resulting data is strictly stored in 1 byte
+        # and endianness does not matter since it is only 1 byte
         result_data += byte.to_bytes(1, "big")
 
-    # Turn to string to strip header later
-    result_data = str(result_data, "utf-8")
-
-    # Strip header
+    # Strip header by slicing its known length
     result_data = result_data[Header.header_length:]
 
-    # If compressed, decompress
+    # If compressed (as indicated by the header), decompress it
     if header_metadata["compression"] > 0:
+        # NOTE: This is a temporary fix as mentioned in the issue
+        # The last few bits are read improbably, hence the 
+        # base64 padding is wrong
+        # This part removes the invalid padding and append
+        # a valid one.
         result_data = result_data[:result_data.find("=", -2)] + "=="
-        result_data = bz2.decompress(
-            base64.b64decode(bytes(result_data, "utf-8")))
-    else:
-        result_data = bytes(result_data, "utf-8")
 
-    # Check if stdout is enabled then write
+        # Base64-decode the data and decompress
+        result_data = bz2.decompress(base64.b64decode(result_data))
+
+    # Check if stdout is enabled then write to sys.stdout
     if stdout:
-        print(str(result_data, "utf-8"))
+        try:
+            # Try to print string
+            print(str(result_data, "utf-8"))
+        except:
+            # However if not supported (e.g binary data)
+            # then print raw binary data
+            print(result_data)
 
     # Write data to output file
     write_output_data(result_data, output_file)
 
-    return 0
+    return True
