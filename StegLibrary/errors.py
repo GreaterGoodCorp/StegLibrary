@@ -116,3 +116,16 @@ class UnavailableFileError(SteganographyError):
 
     def __str__(self) -> str:
         return "File is taken! Please try a different filename."
+
+class OutputFileIOError(SteganographyError):
+    """
+    This class inherits from the base Steganography class.
+
+    Raised when the destination file already exists.
+    """
+
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
+    def __str__(self) -> str:
+        return "Data cannot be written to output file!"
