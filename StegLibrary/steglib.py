@@ -8,6 +8,8 @@ import base64
 import imghdr
 from os import path
 
+import PIL
+
 from StegLibrary import Header
 from StegLibrary.errors import *
 from StegLibrary.helper import err_imp
@@ -22,7 +24,7 @@ except ImportError:
 
 def validate_image_file(image_file: str):
     """
-    Validate image file by checking its availability and type.
+    Validates image file by checking its availability and type.
 
     * Positional arguments:
 
@@ -54,7 +56,7 @@ def validate_image_file(image_file: str):
 
 def validate_data_file(data_file: str):
     """
-    Validate data file by checking its availability.
+    Validates data file by checking its availability.
 
     * Positional arguments:
 
@@ -78,7 +80,7 @@ def validate_data_file(data_file: str):
 
 def preprocess_data_file(data_file: str):
     # Perform validation again
-    # just in case when the function is not called
+    # just in case when the validation is not called
     validate_data_file(data_file)
 
     # Perform read operation on data file
@@ -103,22 +105,70 @@ def preprocess_data_file(data_file: str):
     return data
 
 
+def retrieve_image(image_file: str):
+    """
+    Retrieves the image from image file.
+
+    Positional arguments:
+
+    image_file -- Path to image file
+
+    Returns:
+
+    PIL.Image object of the image file
+
+    Raises:
+
+    ImageFileValidationError: Raised when any validation step fails
+    """
+    # Perform validation again
+    # just in case when the validation is not called
+    validate_image_file(image_file)
+
+    # Attempt to read image data
+    image = None
+    try:
+        image = Image.open(image_file)
+    except PIL.UnidentifiedImageError as e:
+        # If failed, wrap the original error inside custom error
+        # for compatibility
+        raise ImageFileValidationError("IO", e)
+
+    # Perform image data validation
+    if image == None:
+        raise ImageFileValidationError("EmptyFile")
+
+    # If image is successfully read then return
+    return image
+
+
 def write_steg(data_file: str, image_file: str, key: str, compression: int, density: int, output_file: str):
     """Write a steganograph
 
-    Args:
+    * Positional arguments:
 
-        data_file (str): Path to data file
+    data_file -- Path to data file
 
-        image_file (str): Path to image file
+    image_file -- Path to image file
 
-        key (str): Authentication key
+    key -- Authentication key
 
-        compression (int): Compression level
+    compression -- Compression level
 
-        density (int): Density level
+    density -- Density level
 
-        output_file (str): Path to output file
+    output_file -- Path to output file
+
+    * Raises:
+
+    ImageFileValidationError: Raised when image validation failed
+
+    DataFileValidationError: Raised when data validation failed
+
+    * Returns:
+
+    True if a stegnograph has been successfully created and written on disks
+
     """
 
     # Validate the (path to) image file and data file
@@ -141,10 +191,10 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
     # Serialise data
     data = bytes(data, "utf-8")
 
-    # Retrieve metadata of the image
-    im = Image.open(image_file)
-    pix = im.load()
-    x_dim, y_dim = im.size
+    # Read and retrieve image data
+    image = retrieve_image(image_file)
+    pix = image.load()
+    x_dim, y_dim = image.size
 
     # Check if the image has enough room to store data
     no_of_pixel = x_dim * y_dim
@@ -196,7 +246,7 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
                     current_pix = list(pix[x, y])
 
     # Save as PNG
-    im.save(output_file)
+    image.save(output_file)
     return 0
 
 
@@ -205,11 +255,11 @@ def extract_steg(steg_file, output_file, key, **kwargs):
 
     Args:
 
-        steg_file (str): Path to steganograph
+        steg_file -- Path to steganograph
 
-        output_file (str): Path to output file
+        output_file -- Path to output file
 
-        key (str): Authentication key
+        key -- Authentication key
     """
     # Load the steganograph
     im = Image.open(steg_file)
