@@ -495,7 +495,12 @@ def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = Fals
         # base64 padding is wrong
         # This part removes the invalid padding and append
         # a valid one.
-        result_data = result_data[:result_data.find("=", -2)] + "=="
+
+        # Find the index of padding
+        padding_index = result_data.find(b"=", -2)
+
+        # Remove the padding by slicing and add the new padding
+        result_data = result_data[:padding_index] + b"=="
 
         # Base64-decode the data and decompress
         result_data = bz2.decompress(base64.b64decode(result_data))
