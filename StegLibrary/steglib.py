@@ -142,6 +142,24 @@ def retrieve_image(image_file: str):
     return image
 
 
+def check_file_availability(file: str):
+    """
+    Checks if file exists already.
+
+    * Positional arguments:
+
+    file -- Path to file to be checked
+
+    * Returns:
+
+    True if file does not exist, otherwise False
+    """
+    # Check if file is already exist
+    if path.exists(file):
+        return False
+    return True
+
+
 def write_steg(data_file: str, image_file: str, key: str, compression: int, density: int, output_file: str):
     """Write a steganograph
 
@@ -176,6 +194,9 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
     # Validate the (path to) image file and data file
     validate_image_file(image_file)
     validate_data_file(data_file)
+
+    # Check file availability
+    check_file_availability(output_file)
 
     # Pre-process data file and read data
     data = preprocess_data_file(data_file)
