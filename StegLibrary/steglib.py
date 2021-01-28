@@ -22,15 +22,19 @@ except ImportError:
 
 def validate_image_file(image_file: str):
     """
-    Validate the (path to) image file
+    Validate image file by checking its availability and type.
 
-    Args:
+    * Positional arguments:
 
-        image_file (str): Path to image file
+    image_file (str) -- Path to image file
 
-    Raises:
+    * Returns:
 
-        ImageFileValidationError: Raised when the validation fails
+    True if validation has run and succeeded
+
+    * Raises:
+
+    ImageFileValidationError: Raised when any validation step fails
     """
     # Make sure the path to image file exist, and it must be a file
     if not path.isfile(image_file):
@@ -50,15 +54,19 @@ def validate_image_file(image_file: str):
 
 def validate_data_file(data_file: str):
     """
-    Validate the (path to) data file
+    Validate data file by checking its availability.
 
-    Args:
+    * Positional arguments:
 
-        data_file (str): Path to data file
+    data_file -- Path to data file
 
-    Raises:
+    * Returns:
 
-        DataFileValidationError: Raised when the validation fails
+    True if validation has run and succeeded
+
+    * Raises:
+
+    DataFileValidationError: Raised when any validation step fails
     """
     # Make sure the path to data file exist, and it must be a file
     if not path.isfile(data_file):
@@ -92,6 +100,7 @@ def preprocess_data_file(data_file: str):
         raise DataFileValidationError("EmptyFile")
 
     # Return data if all checks are good to go
+    return data
 
 
 def write_steg(data_file: str, image_file: str, key: str, compression: int, density: int, output_file: str):
