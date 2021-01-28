@@ -27,6 +27,7 @@ class ImageFileValidationError(SteganographyError):
     all_errors = {
         "FileNotFound": "The image file specified is not found or is a directory.",
         "NotImageFile": "The file given is not an image file.",
+        "EmptyFile": "The image file is unreadable or corrupted.",
         "IO": "The image file cannot be read or opened.",
     }
 
