@@ -3,7 +3,6 @@
 # an option to enable password verification.
 
 # Builtins
-import hashlib
 import bz2
 import base64
 import imghdr
@@ -19,6 +18,7 @@ try:
 except ImportError:
     err_imp("Pillow")
     exit(1)
+
 
 def validate_image_file(image_file: str):
     """
@@ -47,6 +47,7 @@ def validate_image_file(image_file: str):
     # Return True as a signal that the validation has been run and succeeded
     return True
 
+
 def validate_data_file(data_file: str):
     """
     Validate the (path to) data file
@@ -65,6 +66,7 @@ def validate_data_file(data_file: str):
 
     # Return True as a signal that the validation has been run and succeeded
     return True
+
 
 def preprocess_data_file(data_file: str):
     # Perform validation again
@@ -91,6 +93,7 @@ def preprocess_data_file(data_file: str):
 
     # Return data if all checks are good to go
 
+
 def write_steg(data_file: str, image_file: str, key: str, compression: int, density: int, output_file: str):
     """Write a steganograph
 
@@ -115,9 +118,6 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
 
     # Pre-process data file and read data
     data = preprocess_data_file(data_file)
-
-    # Calculate key hash
-    key = hashlib.md5(key.encode()).hexdigest()[:Header.key_hash_length]
 
     # Compress data (if needed)
     if compression > 0:
@@ -259,14 +259,7 @@ def extract_steg(steg_file, output_file, key, **kwargs):
         raise ValueError("Invalid steganograph")
 
     # Retrieve data from header
-    header_metadata = Header.parse(str(result_data, "utf-8"))
-
-    # Calculate key hash
-    key_hash = hashlib.md5(key.encode()).hexdigest()[:Header.key_hash_length]
-
-    # Authenticate
-    if key_hash != header_metadata["key_hash"]:
-        raise ValueError("Authentication key does not match!")
+    header_metadata = Header.parse(str(result_data, "utf-8"), key)
 
     # Attempt to read the remaining data
     # Mechanism is same as above

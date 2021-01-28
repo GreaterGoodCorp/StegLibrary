@@ -2,7 +2,7 @@
 # create and maintain the header of each steganograph.
 
 import re
-
+import hashlib
 
 class Header:
     """Provides for the preparation of the creation of steganographs."""
@@ -29,14 +29,14 @@ class Header:
             "data_length": self.data_length,
             "compression": self.compression,
             "density": self.density,
-            "key_hash": self.key_hash,
+            "key": self.key,
         }
 
     def __repr__(self) -> str:
         """Same as __str__, returns the header."""
         return str(self)
 
-    def __init__(self, data_length: int, compression: int, density: int, key_hash: str) -> None:
+    def __init__(self, data_length: int, compression: int, density: int, key: str) -> None:
         """
         Initilises a Header instance.
 
@@ -57,10 +57,8 @@ class Header:
             raise ValueError("The density request is not available!")
         self.density = density
 
-        if len(key_hash) != Header.key_hash_length:
-            raise ValueError(
-                f"The length of the key hash does not match requirements: {Header.key_hash_length}")
-        self.key_hash = key_hash
+        # Generate key hash with required length from key
+        self.key_hash = hashlib.md5(key.encode()).hexdigest()[:Header.key_hash_length]
 
         self.generate()
 
@@ -117,13 +115,15 @@ class Header:
         return False
 
     @staticmethod
-    def parse(header: str) -> dict:
+    def parse(header: str, key: str) -> dict:
         """
         Parses header into original metadata.
 
         Keyword argument:
 
         header -- Header to be parsed
+
+        key -- Validation key
         """
         result_dict = {
             "data_length": None,
@@ -150,6 +150,11 @@ class Header:
         flag = int(mixer[2:4])
         result_dict["density"] = flag & 0b11
         result_dict["compression"] = (flag - (flag & 0b11)) >> 2
+
+        # Validate key hash
+        key_hash = hashlib.md5(key.encode()).hexdigest()[:Header.key_hash_length]
+        if key_hash != result_dict["key_hash"]:
+            raise ValueError("Authentication key does not match!")
 
         # Return the resulting dictionary
         return result_dict
