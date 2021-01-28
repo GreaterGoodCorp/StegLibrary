@@ -25,8 +25,8 @@ class ImageFileValidationError(SteganographyError):
     Raised when there is an error during the image file validation process.
     """
     all_errors = {
-        "FileNotFound": "The image file specified is not found",
-        "NotImageFile": "The file given is not an image file",
+        "FileNotFound": "The image file specified is not found or is a directory.",
+        "NotImageFile": "The file given is not an image file.",
     }
 
     def __init__(self, error_type, *args: object) -> None:
@@ -46,7 +46,7 @@ class DataFileValidationError(SteganographyError):
     Raised when there is an error during the data file validation process.
     """
     all_errors = {
-        "FileNotFound": "The data file specified is not found",
+        "FileNotFound": "The data file specified is not found or is a directory.",
     }
 
     def __init__(self, error_type, *args: object) -> None:
