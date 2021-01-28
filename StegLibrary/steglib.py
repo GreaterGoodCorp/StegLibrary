@@ -175,6 +175,44 @@ def check_file_availability(file: str):
     return True
 
 
+def write_output_data(data: bytes, output_file: str):
+    """
+    Writes binary data to output file.
+
+    * Positional arguments:
+    
+    data -- Binary data to be written
+
+    output_file -- Path to output file
+
+    * Returns:
+
+    True if data is written succesfully to output file
+
+    * Raises:
+
+    UnavailableFileError: Raised when the destination file is unavailable
+
+    OutputFileIOError: Raised when data cannot be written to file due to I/O error
+    """
+    # Check if output file is available
+    if not check_file_availability(output_file):
+        raise UnavailableFileError()
+
+    # Attempt to write data to output file
+    try:
+        # Write in binary to write binary data
+        with open(output_file, "wb") as file:
+            file.write(data)
+    except OSError as e:
+        # Raise custom error with internal error as an argument
+        # for easy debugging
+        raise OutputFileIOError(e)
+
+    # Return True as a signal that write operation succeeded
+    return True
+
+
 def write_steg(data_file: str, image_file: str, key: str, compression: int, density: int, output_file: str):
     """Write a steganograph
 
@@ -449,7 +487,6 @@ def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = Fals
         print(str(result_data, "utf-8"))
 
     # Write data to output file
-    with open(output_file, "wb") as f:
-        f.write(result_data)
+    write_output_data(result_data, output_file)
 
     return 0
