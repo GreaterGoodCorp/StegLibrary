@@ -47,6 +47,8 @@ class DataFileValidationError(SteganographyError):
     """
     all_errors = {
         "FileNotFound": "The data file specified is not found or is a directory.",
+        "EmptyFile": "The data file is empty or unreadable.",
+        "IO": "File cannot be read or opened."
     }
 
     def __init__(self, error_type, *args: object) -> None:
@@ -55,6 +57,14 @@ class DataFileValidationError(SteganographyError):
             raise SteganographyError(
                 True, DataFileValidationError, "The specified error type is invalid")
         self.error_type = error_type
+        if error_type == "IO":
+            if len(args) == 0:
+                raise SteganographyError(
+                    True, DataFileValidationError, "Missing information")
+        self.inner_error = args[0]
 
     def __str__(self) -> str:
-        return DataFileValidationError.all_errors[self.error_type]
+        if self.error_type == "IO":
+            return self.inner_error
+        else:
+            return DataFileValidationError.all_errors[self.error_type]
