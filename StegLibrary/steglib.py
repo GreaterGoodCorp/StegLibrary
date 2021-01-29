@@ -163,6 +163,12 @@ def retrieve_image(image_file: str) -> Image:
     Raises:
 
     ImageFileValidationError: Raised when any validation step fails
+
+    TypeError: Raised when the parameter provided is not a string
+
+    RelativePathError: Raised when provided path is relative
+
+    PIL.UnidentifiedImageError: Raised when image is corrupted
     """
     # Perform validation again
     # just in case when the validation is not called
