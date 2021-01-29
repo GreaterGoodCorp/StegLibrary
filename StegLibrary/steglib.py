@@ -8,15 +8,13 @@ import base64
 import imghdr
 from os import path
 
-import PIL
-
 from StegLibrary import Header
 from StegLibrary.errors import *
 from StegLibrary.helper import err_imp
 
 # Extra
 try:
-    from PIL import Image
+    from PIL import Image, UnidentifiedImageError
 except ImportError:
     err_imp("Pillow")
     exit(1)
@@ -144,7 +142,7 @@ def retrieve_image(image_file: str) -> Image:
     image = None
     try:
         image = Image.open(image_file)
-    except PIL.UnidentifiedImageError as e:
+    except UnidentifiedImageError as e:
         # If failed, wrap the original error inside custom error
         # for compatibility
         raise ImageFileValidationError("IO", e)
