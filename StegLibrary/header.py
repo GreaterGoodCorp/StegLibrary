@@ -5,6 +5,7 @@ import re
 import hashlib
 from StegLibrary.errors import HeaderError
 
+
 class Header:
     """Provides for the preparation of the creation of steganographs."""
 
@@ -80,7 +81,8 @@ class Header:
         self.density = density
 
         # Generate key hash with required length from key
-        self.key_hash = hashlib.md5(key.encode()).hexdigest()[:Header.key_hash_length]
+        self.key_hash = hashlib.md5(key.encode()).hexdigest()[
+            :Header.key_hash_length]
 
         # Generate header
         self.generate()
@@ -179,7 +181,8 @@ class Header:
         result_dict["compression"] = (flag - (flag & 0b11)) >> 2
 
         # Validate key hash
-        key_hash = hashlib.md5(key.encode()).hexdigest()[:Header.key_hash_length]
+        key_hash = hashlib.md5(key.encode()).hexdigest()[
+            :Header.key_hash_length]
         if key_hash != result_dict["key_hash"]:
             raise HeaderError("AuthError")
 

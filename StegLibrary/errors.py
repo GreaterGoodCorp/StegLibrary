@@ -64,6 +64,7 @@ class DataFileValidationError(SteganographyError):
     def __str__(self) -> str:
         return DataFileValidationError.all_errors[self.error_type]
 
+
 class InsufficientStorageError(SteganographyError):
     """
     This class inherits from the base Steganography class.
@@ -76,6 +77,7 @@ class InsufficientStorageError(SteganographyError):
 
     def __str__(self) -> str:
         return "There is insufficient storage in image file."
+
 
 class HeaderError(SteganographyError):
     """
@@ -114,6 +116,7 @@ class UnavailableFileError(SteganographyError):
     def __str__(self) -> str:
         return "File is taken! Please try a different filename."
 
+
 class OutputFileIOError(SteganographyError):
     """
     This class inherits from the base Steganography class.
@@ -127,12 +130,14 @@ class OutputFileIOError(SteganographyError):
     def __str__(self) -> str:
         return "Data cannot be written to output file!"
 
+
 class RelativePathError(SteganographyError):
     """
     This class inherits from the base Steganography class.
 
     Raised when the path provided is relative.
     """
+
     def __init__(self, *args: object) -> None:
         super().__init__(False, *args)
 
