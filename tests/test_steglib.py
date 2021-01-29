@@ -1,4 +1,5 @@
 import pytest
+import subprocess
 import os
 
 from StegLibrary.steglib import *
@@ -12,6 +13,12 @@ sample_jpg_path = os.path.join(tests_path, "sample.jpg")
 sample_dir_path = os.path.join(tests_path, "sample_dir")
 sample_non_path = os.path.join(tests_path, "sample.non")
 sample_nor_path = os.path.join(tests_path, "sample.nor")
+
+@pytest.fixture(autouse=True)
+def setup():
+    subprocess.Popen("chmod 000 tests/sample.nor".split(" "))
+    yield
+    subprocess.Popen("chmod 444 tests/sample.nor".split(" "))
 
 
 def test_image_file_validator():
