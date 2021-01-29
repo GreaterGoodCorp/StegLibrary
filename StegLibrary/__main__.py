@@ -8,8 +8,6 @@ except ImportError:
     err_imp("click")
     exit(1)
 
-default_image = path.join("images", "sample.png")
-
 
 @click.group()
 def steg():
@@ -17,7 +15,7 @@ def steg():
 
 
 @steg.command("create", help="Create steganograph")
-@click.option("-i", "--image", help="Path to custom image file", type=click.Path(True, True, False))
+@click.option("-i", "--image", help="Path to custom image file", type=click.Path(True, True, False), required=True)
 @click.option("-k", "--key", help="The authentication key", type=str, default=Header.default_key)
 @click.option("-c", "--compress", help="Compression level of the steganograph", type=int, default=9)
 @click.option("-p", "--pack", help="Density of the steganograph (from 1 to 3)", type=int, default=1)
@@ -28,11 +26,7 @@ def create(image: str, key: str, compress: int, pack: int, output: str, data: st
         raise click.exceptions.BadOptionUsage(
             "pack", "Density must be from 1 to 3!")
 
-    if image == None:
-        # Get the absolute path for the default image
-        image = path.abspath(path.dirname(__file__))
-        image = path.join(image, default_image)
-    elif not path.isabs(image):
+    if not path.isabs(image):
         # Get the absolute path for the user-specified image
         image = path.join(os.getcwd(), *path.split(image))
 
