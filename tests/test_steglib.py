@@ -14,6 +14,9 @@ sample_dir_path = os.path.join(tests_path, "sample_dir")
 sample_non_path = os.path.join(tests_path, "sample.non")
 sample_nor_path = os.path.join(tests_path, "sample.nor")
 
+sample_bin_data = b"asdawerqe11231c2312ecSDCq12ec12ec"
+
+
 @pytest.fixture(autouse=True)
 def setup():
     subprocess.Popen("chmod 000 tests/sample.nor".split(" "))
@@ -23,7 +26,7 @@ def setup():
 
 def test_image_file_validator():
     assert validate_image_file(sample_png_path)
-    
+
     with pytest.raises(ImageFileValidationError):
         validate_image_file(sample_jpg_path)
 
@@ -42,11 +45,12 @@ def test_image_file_validator():
     with pytest.raises(RelativePathError):
         validate_image_file(os.path.join("tests", "sample.png"))
 
+
 def test_data_file_validator():
     assert validate_data_file(sample_png_path)
     assert validate_data_file(sample_jpg_path)
     assert validate_data_file(sample_txt_path)
-    
+
     with pytest.raises(DataFileValidationError):
         validate_data_file(sample_dir_path)
 
@@ -58,6 +62,7 @@ def test_data_file_validator():
 
     with pytest.raises(RelativePathError):
         validate_data_file(os.path.join("tests", "sample.png"))
+
 
 def test_preprocess_data_file():
     assert isinstance(preprocess_data_file(sample_png_path), bytes)
@@ -73,9 +78,10 @@ def test_preprocess_data_file():
     with pytest.raises(RelativePathError):
         preprocess_data_file(os.path.join("tests", "sample.png"))
 
+
 def test_retrieve_image():
     assert retrieve_image(sample_png_path)
-    
+
     with pytest.raises(ImageFileValidationError):
         retrieve_image(sample_jpg_path)
 
@@ -93,3 +99,14 @@ def test_retrieve_image():
 
     with pytest.raises(RelativePathError):
         retrieve_image(os.path.join("tests", "sample.png"))
+
+
+def test_check_file_availability():
+    assert not check_file_availability(sample_jpg_path)
+    assert check_file_availability(sample_non_path)
+
+    with pytest.raises(TypeError):
+        check_file_availability(123)
+
+    with pytest.raises(RelativePathError):
+        check_file_availability(os.path.join("tests", "sample.png"))
