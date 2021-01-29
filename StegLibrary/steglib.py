@@ -20,7 +20,7 @@ except ImportError:
     exit(1)
 
 
-def validate_image_file(image_file: str):
+def validate_image_file(image_file: str) -> bool:
     """
     Validates image file by checking its availability and type.
 
@@ -35,7 +35,19 @@ def validate_image_file(image_file: str):
     * Raises:
 
     ImageFileValidationError: Raised when any validation step fails
+
+    TypeError: Raised when the parameter provided is not a string
+
+    RelativePathError: Raised when provided path is relative
     """
+    # Type-checking
+    if not isinstance(image_file, str):
+        raise TypeError("Path to image file must be a string!")
+
+    # Ensuring absolute path
+    if not path.isabs(image_file):
+        raise RelativePathError()
+
     # Make sure the path to image file exist, and it must be a file
     if not path.isfile(image_file):
         # If file does not exist, raise exception
@@ -67,7 +79,19 @@ def validate_data_file(data_file: str) -> bool:
     * Raises:
 
     DataFileValidationError: Raised when any validation step fails
+
+    TypeError: Raised when the parameter provided is not a string
+
+    RelativePathError: Raised when provided path is relative
     """
+    # Type-checking
+    if not isinstance(data_file, str):
+        raise TypeError("Path to data file must be a string!")
+
+    # Ensuring absolute path
+    if not path.isabs(data_file):
+        raise RelativePathError()
+
     # Make sure the path to data file exist, and it must be a file
     if not path.isfile(data_file):
         raise DataFileValidationError("FileNotFound")
@@ -91,7 +115,13 @@ def preprocess_data_file(data_file: str) -> bytes:
     * Raises:
 
     DataFileValidationError: Raised when data file is unreadable or corrupted
+
+    RelativePathError: Raised when provided path is relative
     """
+    # Type checking
+    if not isinstance(data_file, str):
+        raise TypeError("Path to data file must be a string!")
+
     # Perform validation again
     # just in case when the validation is not called
     validate_data_file(data_file)
