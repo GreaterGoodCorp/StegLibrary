@@ -17,10 +17,6 @@ setup(
         "click",
     ],
     packages=find_packages(),
-    package_data={
-        "StegLibrary": ["images/sample.png"],
-    },
-    include_package_data=True,
     platforms=["any"],
     classifiers=[
         "Development Status :: 4 - Beta",
