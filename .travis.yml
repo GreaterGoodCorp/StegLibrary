@@ -1,0 +1,20 @@
+language: python
+jobs:
+  include:
+    - name: "Linux"
+      python: 3.9
+    - name: "Python 3.7.4 on macOS"
+      os: osx
+      osx_image: xcode12.2
+      language: shell
+    - name: "Python 3.8.0 on Windows"
+      os: windows
+      language: shell
+      before_install:
+        - choco install python --version 3.9.2
+        - python -m pip install --upgrade pip
+      env: PATH=/c/Python39:/c/Python39/Scripts:$PATH
+install:
+  - pip3 install -r requirements.txt
+script:
+  - pytest
