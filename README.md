@@ -61,7 +61,7 @@ import StegLibrary
 
 The two available functions for creating and extracting steganographs are as follow:
 
-* Creating steganographs (Definition can be found [here](https://github.com/MunchDev/StegLibrary/blob/cbf4032603f1edd71eb7d7d3fe64ee80dfb2d0f7/StegLibrary/steglib.py#L216))
+* Creating steganographs
 
 ```python
 def write_steg(data_file: str, image_file: str, key: str, compression: int, density: int, output_file: str) -> bool:
@@ -97,7 +97,7 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
     """
 ```
 
-* Extracting steganographs (Definition can be found [here](https://github.com/MunchDev/StegLibrary/blob/cbf4032603f1edd71eb7d7d3fe64ee80dfb2d0f7/StegLibrary/steglib.py#L351))
+* Extracting steganographs
 
 ```python
 def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = False) -> bool:
