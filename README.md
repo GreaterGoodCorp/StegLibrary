@@ -3,6 +3,14 @@
 StegLibrary is a Python 3 library that implements and extending on the practice of
 Steganography, making it more accessible to average users.
 
+## Disclaimer
+
+I created this project during my free time (as a secondary school student). The code is really imperfect, but it is a great way
+for me to try out different development technique. Hence, if you are a serious developer looking for a steganography library,
+please **do not use** this one, since there are a lot of production-ready projects out there. However, if you are a hobbyist
+like me, please feel free to clone/install this project, explore and even contribute! Again, if you are using project seriously,
+please stop reading, otherwise please go ahead and read this entire file.
+
 ## Installation
 
 Before installation, please make sure `python3` (version >= 3.6) is installed on your machine.
@@ -27,13 +35,14 @@ pip install -r requirements.txt
 
 Via `pip` (production):
 
-```
+```bash
 python3 -m pip install --upgrade pip
 pip3 install StegLibrary
 ```
 
 Via source (testing/development):
-```
+
+```bash
 git clone https://github.com/MunchDev/StegLibrary
 cd StegLibrary
 python3 -m pip install --upgrade pip
@@ -42,11 +51,83 @@ pip3 install -r requirements.txt
 
 ## Usage
 
-### Windows
+### Package structure & documentation
 
-The script can be used directly by executing:
+Once installed, the package can be imported with the name `StegLibrary`:
 
+```python
+import StegLibrary
 ```
-python -m StegLibrary
+
+The two available functions for creating and extracting steganographs are as follow:
+
+* Creating steganographs (Definition can be found [here](https://github.com/MunchDev/StegLibrary/blob/cbf4032603f1edd71eb7d7d3fe64ee80dfb2d0f7/StegLibrary/steglib.py#L216))
+
+```python
+def write_steg(data_file: str, image_file: str, key: str, compression: int, density: int, output_file: str) -> bool:
+    """Write a steganograph
+       
+    * Positional arguments:
+    
+    data_file -- Path to data file
+       
+    image_file -- Path to image file
+       
+    key -- Authentication key
+       
+    compression -- Compression level
+       
+    density -- Density level
+       
+    output_file -- Path to output file
+       
+    * Raises:
+       
+    ImageFileValidationError: Raised when image validation failed
+       
+    DataFileValidationError: Raised when data validation failed
+       
+    InsufficientStorageError: Raised when there is insufficient storage
+       
+    UnavailableFileError: Raised when the output file already exists
+       
+    * Returns:
+       
+    True if a stegnograph has been successfully created and written on disks
+    """
 ```
 
+* Extracting steganographs (Definition can be found [here](https://github.com/MunchDev/StegLibrary/blob/cbf4032603f1edd71eb7d7d3fe64ee80dfb2d0f7/StegLibrary/steglib.py#L351))
+
+```python
+def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = False) -> bool:
+    """
+    Extracts data from steganograph.
+    
+    * Positional arguments:
+    
+    steg_file -- Path to steganograph
+    
+    output_file -- Path to output file
+    
+    key -- Authentication key
+    
+    stdout -- Send output to sys.stdout
+    
+    * Returns:
+    
+    True if the steganograph is extracted and written to disk successfully
+    
+    * Raises:
+    
+    HeaderError: Raised when the header of the stegnograph is invalid
+    """
+```
+
+### Command-line application
+
+The package is also designed to be invoked from the CLI. The interface is written using `Click`.
+
+#### Windows
+
+Usage: `python -m StegLibrary`
