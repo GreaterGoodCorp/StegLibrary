@@ -65,3 +65,24 @@ def test_preprocess_data_file():
 
     with pytest.raises(RelativePathError):
         preprocess_data_file(os.path.join("tests", "sample.png"))
+
+def test_retrieve_image():
+    assert retrieve_image(sample_png_path)
+    
+    with pytest.raises(ImageFileValidationError):
+        retrieve_image(sample_jpg_path)
+
+    with pytest.raises(ImageFileValidationError):
+        retrieve_image(sample_txt_path)
+
+    with pytest.raises(ImageFileValidationError):
+        retrieve_image(sample_dir_path)
+
+    with pytest.raises(ImageFileValidationError):
+        retrieve_image(sample_non_path)
+
+    with pytest.raises(TypeError):
+        retrieve_image(123)
+
+    with pytest.raises(RelativePathError):
+        retrieve_image(os.path.join("tests", "sample.png"))
