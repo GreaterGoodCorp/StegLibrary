@@ -130,4 +130,6 @@ The package is also designed to be invoked from the CLI. The interface is writte
 
 #### Windows
 
-Usage: `python -m StegLibrary`
+Usage: `python -m StegLibrary [OPTIONS] COMMAND [ARGS] ...`
+
+Help message can be printed by running `python -m StegLibrary --help`
