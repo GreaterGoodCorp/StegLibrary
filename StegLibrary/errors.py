@@ -8,7 +8,7 @@ class SteganographyError(Exception):
     Raised when an exception occurs inside its subclasses.
     """
 
-    def __init__(self, sub_class: bool = True, *args: object) -> None:
+    def __init__(self, sub_class: bool = False, *args: object) -> None:
         super().__init__(*args)
         self.sub_class = args[0] if sub_class else None
         self.sub_msg = args[1] if sub_class else None
@@ -32,16 +32,11 @@ class ImageFileValidationError(SteganographyError):
     }
 
     def __init__(self, error_type, *args: object) -> None:
-        super().__init__(*args)
+        super().__init__(False, *args)
         if error_type not in ImageFileValidationError.all_errors:
             raise SteganographyError(
                 True, ImageFileValidationError, "The specified error type is invalid")
         self.error_type = error_type
-        if error_type == "IO":
-            if len(args) == 0:
-                raise SteganographyError(
-                    True, ImageFileValidationError, "Missing information")
-        self.inner_error = args[0]
 
     def __str__(self) -> str:
         return ImageFileValidationError.all_errors[self.error_type]
@@ -60,22 +55,14 @@ class DataFileValidationError(SteganographyError):
     }
 
     def __init__(self, error_type, *args: object) -> None:
-        super().__init__(*args)
+        super().__init__(False, *args)
         if error_type not in DataFileValidationError.all_errors:
             raise SteganographyError(
                 True, DataFileValidationError, "The specified error type is invalid")
         self.error_type = error_type
-        if error_type == "IO":
-            if len(args) == 0:
-                raise SteganographyError(
-                    True, DataFileValidationError, "Missing information")
-        self.inner_error = args[0]
 
     def __str__(self) -> str:
-        if self.error_type == "IO":
-            return str(self.inner_error)
-        else:
-            return DataFileValidationError.all_errors[self.error_type]
+        return DataFileValidationError.all_errors[self.error_type]
 
 class InsufficientStorageError(SteganographyError):
     """
@@ -85,7 +72,7 @@ class InsufficientStorageError(SteganographyError):
     """
 
     def __init__(self, *args: object) -> None:
-        super().__init__(*args)
+        super().__init__(False, *args)
 
     def __str__(self) -> str:
         return "There is insufficient storage in image file."
@@ -104,22 +91,14 @@ class HeaderError(SteganographyError):
     }
 
     def __init__(self, error_type, *args: object) -> None:
-        super().__init__(*args)
+        super().__init__(False, *args)
         if error_type not in DataFileValidationError.all_errors:
             raise SteganographyError(
                 True, DataFileValidationError, "The specified error type is invalid")
         self.error_type = error_type
-        if error_type == "IO":
-            if len(args) == 0:
-                raise SteganographyError(
-                    True, DataFileValidationError, "Missing information")
-        self.inner_error = args[0]
 
     def __str__(self) -> str:
-        if self.error_type == "IO":
-            return str(self.inner_error)
-        else:
-            return DataFileValidationError.all_errors[self.error_type]
+        return DataFileValidationError.all_errors[self.error_type]
 
 
 class UnavailableFileError(SteganographyError):
@@ -130,7 +109,7 @@ class UnavailableFileError(SteganographyError):
     """
 
     def __init__(self, *args: object) -> None:
-        super().__init__(*args)
+        super().__init__(False, *args)
 
     def __str__(self) -> str:
         return "File is taken! Please try a different filename."
@@ -143,7 +122,19 @@ class OutputFileIOError(SteganographyError):
     """
 
     def __init__(self, *args: object) -> None:
-        super().__init__(*args)
+        super().__init__(False, *args)
 
     def __str__(self) -> str:
         return "Data cannot be written to output file!"
+
+class RelativePathError(SteganographyError):
+    """
+    This class inherits from the base Steganography class.
+
+    Raised when the path provided is relative.
+    """
+    def __init__(self, *args: object) -> None:
+        super().__init__(False, *args)
+
+    def __str__(self) -> str:
+        return "Path must be absolute!"
