@@ -110,9 +110,6 @@ class ANSIFormatter:
             return print(obj_str, *args, **kwargs)
 
 
-print = ANSIFormatter.extendedPrint
-
-
 def err_imp(pkg_name):
     s = f"[Package] This package is not installed: {pkg_name}"
-    return print(s, ansi=ANSIFormatter.Red)
+    return ANSIFormatter.extendedPrint(s, ansi=ANSIFormatter.Red)
