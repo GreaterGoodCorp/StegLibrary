@@ -110,3 +110,12 @@ def test_check_file_availability():
 
     with pytest.raises(RelativePathError):
         check_file_availability(os.path.join("tests", "sample.png"))
+
+def test_write_output_data(tmpdir):
+    assert write_output_data(sample_bin_data, os.path.join(tmpdir, "a"))
+
+    with pytest.raises(TypeError):
+        write_output_data(sample_dir_path, os.path.join(tmpdir, "b"))
+
+    with pytest.raises(UnavailableFileError):
+        write_output_data(sample_bin_data, os.path.join(tmpdir, "a"))
