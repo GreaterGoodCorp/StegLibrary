@@ -202,11 +202,23 @@ def check_file_availability(file: str) -> bool:
     * Returns:
 
     True if file does not exist, otherwise False
+
+    * Raises:
+
+    RelativePathError: Raised when provided path is relative
+
+    TypeError: Raised when the parameter provided is not a string
     """
+    # Type checking
+    if not isinstance(file, str):
+        raise TypeError("Path to file must be a string!")
+
+    # Check if relative path
+    if not path.isabs(file):
+        raise RelativePathError()
+
     # Check if file is already exist
-    if path.exists(file):
-        return False
-    return True
+    return not path.exists(file)
 
 
 def write_output_data(data: bytes, output_file: str) -> bool:
@@ -228,7 +240,15 @@ def write_output_data(data: bytes, output_file: str) -> bool:
     UnavailableFileError: Raised when the destination file is unavailable
 
     OutputFileIOError: Raised when data cannot be written to file due to I/O error
+
+    RelativePathError: Raised when provided path is relative
+
+    TypeError: Raised when the parameter provided is not a string
     """
+    # Type checking
+    if not isinstance(data, bytes):
+        raise TypeError("Data must be in binary!")
+
     # Check if output file is available
     if not check_file_availability(output_file):
         raise UnavailableFileError()
