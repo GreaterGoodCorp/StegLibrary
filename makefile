@@ -2,7 +2,7 @@ PYTHON = python3
 
 PIP = pip3
 
-.PHONY = help prepare clean
+.PHONY = help prepare clean clean-build clean-venv clean-pyc clean-test
 
 .DEFAULT_GOAL = help
 
