@@ -2,7 +2,7 @@ PYTHON = python3
 
 PIP = pip3
 
-.PHONY = help prepare clean clean-build clean-venv clean-pyc clean-test
+.PHONY = help prepare clean clean-build clean-pyc clean-test
 
 .DEFAULT_GOAL = help
 
@@ -25,31 +25,34 @@ prepare:
 	${PIP} install pytest
 	${PIP} install twine wheel
 
-test: prepare
+test:
+	. .venv/bin/activate
 	pytest
 
-ui: prepare
+ui:
+	. .venv/bin/activate
 	pyuic5 StegLibrary/gui.ui -o StegLibrary/gui.py
 
-gui: prepare ui
+gui: ui
+	. .venv/bin/activate
 	${PYTHON} -m StegLibrary gui
 
-build: prepare clean-build
+build: clean-build
+	. .venv/bin/activate
 	${PYTHON} setup.py sdist bdist_wheel
 
 upload: build
+	. .venv/bin/activate
 	${PYTHON} -m twine upload dist/*
 
-clean: clean-build clean-pyc clean-venv clean-test
+clean: clean-build clean-pyc clean-test
+	deactivate
 
 clean-build:
 	rm -rf build/ dist/ *.egg-info
 
 clean-pyc:
 	find . -name "__pycache__" -exec rm -rf {} +
-
-clean-venv:
-	rm -rf .venv
 
 clean-test:
 	rm -rf .pytest_cache
