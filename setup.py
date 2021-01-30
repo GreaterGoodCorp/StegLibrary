@@ -15,6 +15,8 @@ setup(
     install_requires=[
         "Pillow",
         "click",
+        "pytest",
+        "PyQt5",
     ],
     packages=find_packages(),
     platforms=["any"],
