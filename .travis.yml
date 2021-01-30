@@ -8,6 +8,6 @@ jobs:
       osx_image: xcode12.2
       language: shell
 install:
-  - make prepare
+  - make clean
 script:
   - make test
