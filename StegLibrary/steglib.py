@@ -267,7 +267,8 @@ def write_output_data(data: bytes, output_file: str) -> bool:
     return True
 
 
-def write_steg(data_file: str, image_file: str, key: str, compression: int, density: int, output_file: str) -> bool:
+def write_steg(data_file: str, image_file: str, key: str, compression: int,
+               density: int, output_file: str) -> bool:
     """Write a steganograph
 
     * Positional arguments:
@@ -285,6 +286,8 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
     output_file -- Path to output file
 
     * Raises:
+
+    TypeError: Raised when the parametres are of incorrect types
 
     ImageFileValidationError: Raised when image validation failed
 
@@ -402,7 +405,11 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int, dens
     return 0
 
 
-def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = False) -> bool:
+def extract_steg(steg_file: str,
+                 output_file: str,
+                 key: str,
+                 stdout: bool = False,
+                 header_only: bool = False) -> bool:
     """
     Extracts data from steganograph.
 
@@ -422,6 +429,8 @@ def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = Fals
 
     * Raises:
 
+    TypeError: Raised when the parametres are of incorrect types
+
     HeaderError: Raised when the header of the stegnograph is invalid
 
     """
@@ -430,7 +439,8 @@ def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = Fals
     validate_image_file(steg_file)
 
     # Check availability of output file
-    if not check_file_availability(output_file):
+    # No output for validation, so just add a guard
+    if not (header_only or check_file_availability(output_file)):
         # If file is already taken, raise error
         raise UnavailableFileError()
 
@@ -500,16 +510,21 @@ def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = Fals
     # i.e Not a valid header -> Invalid steganograph
     if density not in Header.available_density:
         # Raise error that the steganograph is invalid
-        raise ValueError("Invalid steganograph")
+        raise HeaderError("InvalidFormat")
 
     # Retrieve data from header
     # Note, HeaderError will be raised if parsing is not done
-    header_metadata = Header.parse(str(result_data, "utf-8"), key)
+    header_metadata = Header.parse(str(result_data, "utf-8"), key, header_only)
+
+    # Return on completion of validation
+    if header_only:
+        return header_metadata
 
     # Attempt to read the remaining data
     # Continue with the result variable already containing the header
     # which will be stripped later
-    while len(result_data) < header_metadata["data_length"] + Header.header_length:
+    while len(result_data
+              ) < header_metadata["data_length"] + Header.header_length:
         byte = 0
         # Read every single bit
         # Iterate through every single bit of the byte
