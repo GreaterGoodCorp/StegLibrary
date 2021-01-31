@@ -200,13 +200,53 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.enable_parametres()
 
     def create(self):
+        self.print_system_status()
         self.write_output("[User] Start creating steganograph...")
+        if len(self.field_authkey.text()) == 0:
+            self.field_authkey.setText(Header.default_key)
+        try:
+            steg.write_steg(
+                self.input_file,
+                self.image_file,
+                self.field_authkey.text(),
+                self.spin_compress.value(),
+                self.spin_density.value(),
+                self.output_file,
+            )
+        except SteganographyError as e:
+            self.write_output("[System] " + str(e))
+            self.write_output("Operation will be cancelled.")
+            return
 
-        pass
+        if self.check_showim.isChecked():
+            im = Image.open(self.output_file)
+            im.show()
+
+        self.reset()
 
     def extract(self):
+        self.print_system_status()
         self.write_output("[User] Start extracting steganograph...")
-        pass
+        if len(self.field_authkey.text()) == 0:
+            self.field_authkey.setText(Header.default_key)
+        try:
+            steg.extract_steg(
+                self.input_file,
+                self.output_file,
+                self.field_authkey.text(),
+                False,
+                False,
+            )
+        except SteganographyError as e:
+            self.write_output("[System] " + str(e))
+            self.write_output("Operation will be cancelled.")
+            return
+
+        if self.check_stdout.isChecked():
+            with open(self.output_file, "r") as f:
+                self.write_output(f.read())
+
+        self.reset()
 
     def print_system_status(self):
         self.write_output(f"[System] Status report:")
