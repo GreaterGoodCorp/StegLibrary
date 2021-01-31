@@ -1,4 +1,5 @@
-from StegLibrary import write_steg, extract_steg, Header, err_imp
+from StegLibrary import write_steg, extract_steg, Header, execute_gui
+from StegLibrary.helper import err_imp
 import os
 from os import path
 
@@ -62,6 +63,10 @@ def extract(key: str, output: str, stdout: bool, steganograph: str):
         output = path.splitext(steganograph)[0]
 
     extract_steg(steganograph, output, key, stdout)
+
+@steg.command("gui", help="Run the Graphical User Interface")
+def gui():
+    execute_gui()
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ with open("README.md", "r") as rm:
 
 setup(
     name="StegLibrary",
-    version="0.3.0",
+    version="0.4.0",
     author="Nguyen Thai Binh",
     author_email="binhnt.mdev@gmail.com",
     description="A package implementing and extending on steganography",
@@ -15,6 +15,8 @@ setup(
     install_requires=[
         "Pillow",
         "click",
+        "pytest",
+        "PyQt5",
     ],
     packages=find_packages(),
     platforms=["any"],

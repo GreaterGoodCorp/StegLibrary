@@ -140,7 +140,7 @@ class Header:
         return False
 
     @staticmethod
-    def parse(header: str, key: str) -> dict:
+    def parse(header: str, key: str, validate_only: bool = False) -> dict:
         """
         Parses header into original metadata.
 
@@ -179,6 +179,10 @@ class Header:
         flag = int(mixer[2:4])
         result_dict["density"] = flag & 0b11
         result_dict["compression"] = (flag - (flag & 0b11)) >> 2
+
+        # Return on completion of validation
+        if validate_only:
+            return result_dict
 
         # Validate key hash
         key_hash = hashlib.md5(key.encode()).hexdigest()[
