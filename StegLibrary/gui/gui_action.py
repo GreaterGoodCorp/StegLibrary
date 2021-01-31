@@ -250,7 +250,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 "[System] The key is required to extract data from the steganograph later."
             )
             self.write_output(
-                "[Systen] Please choose a compression level and density for creation."
+                "[System] Please choose a compression level and density for creation."
             )
             self.write_output(
                 "[System] Please check the appropriate options and click 'Create' to start."
