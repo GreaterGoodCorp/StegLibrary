@@ -46,7 +46,6 @@ upload: build
 	${PYTHON} -m twine upload dist/*
 
 clean: clean-build clean-pyc clean-test
-	deactivate
 
 clean-build:
 	rm -rf build/ dist/ *.egg-info
