@@ -211,12 +211,24 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def print_system_status(self):
         self.write_output(f"[System] Status report:")
         self.write_output(f"[System] Input file: {self.input_file}")
-        if self.has_steg:
-            self.write_output(f"[System] Image file: Not applicable")
-        else:
+        self.write_output(f"[System] File is staganograph? {self.has_steg}")
+        if not self.has_steg:
             self.write_output(f"[System] Image file: {self.image_file}")
-        self.write_output(f"[System] Output file: {self.input_file}")
-        pass
+        self.write_output(f"[System] Output file: {self.output_file}")
+        if len(self.field_authkey.text()) == 0:
+            self.write_output(
+                f"[System] No authentication key given. Default key '{Header.default_key}' used instead."
+            )
+        else:
+            self.write_output(f"[System] Authentication key is as given.")
+        if self.has_steg:
+            self.write_output(
+                f"[System] Redirect output to stdout? {self.check_stdout.isChecked()}"
+            )
+        else:
+            self.write_output(
+                f"[System] Show image on creation? {self.check_showim.isChecked()}"
+            )
 
     def enable_parametres(self):
         if self.has_steg and not self.has_output:
