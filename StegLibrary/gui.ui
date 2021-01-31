@@ -110,6 +110,9 @@
          <property name="enabled">
           <bool>true</bool>
          </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item row="1" column="2">
@@ -123,6 +126,9 @@
         <widget class="QLineEdit" name="field_input">
          <property name="text">
           <string/>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -146,7 +152,11 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QLineEdit" name="field_output"/>
+        <widget class="QLineEdit" name="field_output">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item row="1" column="3">
         <widget class="QLabel" name="label_image_status">
