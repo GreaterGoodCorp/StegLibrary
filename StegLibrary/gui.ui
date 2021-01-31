@@ -470,7 +470,6 @@
     <bool>false</bool>
    </attribute>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="action_help">
    <property name="text">
     <string>Help</string>
