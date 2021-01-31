@@ -117,7 +117,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # Set text on label
             self.label_input_status.setText("Valid file")
             self.label_image_status.setText("Please select image")
-            self.label_output_status.setText("Please select output fil")
+            self.label_output_status.setText("Please select output file")
             # Set colour label
             self.label_input_status.setStyleSheet("QLabel { color : green; }")
             # Enable widgets
