@@ -40,7 +40,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.spin_compress.setValue(9)
         self.spin_density.setValue(1)
 
-        self.check_nowrite.setChecked(0)
         self.check_showim.setChecked(0)
         self.check_stdout.setChecked(0)
 
@@ -230,7 +229,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.has_steg:
             self.field_authkey.setEnabled(1)
             self.check_stdout.setEnabled(1)
-            self.check_nowrite.setEnabled(1)
             self.button_extract.setEnabled(1)
 
             self.write_output(
@@ -264,7 +262,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.spin_density.setDisabled(1)
         self.check_showim.setDisabled(1)
         self.check_stdout.setDisabled(1)
-        self.check_nowrite.setDisabled(1)
         self.button_create.setDisabled(1)
         self.button_extract.setDisabled(1)
 
