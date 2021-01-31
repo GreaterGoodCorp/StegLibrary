@@ -1,4 +1,5 @@
 from os import path
+
 from StegLibrary.errors import ImageFileValidationError
 from StegLibrary.gui import Ui_MainWindow
 import StegLibrary.steglib as steg
@@ -11,13 +12,31 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs) -> None:
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
+        self.reset()
+        self.register_logic()
 
+    def reset(self):
         self.has_steg = False
         self.has_data = False
         self.has_image = False
         self.has_output = False
 
-        self.register_logic()
+        self.input_file = ""
+        self.output_file = ""
+        self.image_file = ""
+
+        self.field_input.setText("")
+        self.field_image.setText("")
+        self.field_output.setText("")
+        self.field_authkey.setText("")
+        self.spin_compress.setValue(9)
+        self.spin_density.setValue(1)
+
+        self.check_nowrite.setChecked(0)
+        self.check_showim.setChecked(0)
+        self.check_stdout.setChecked(0)
+
+        self.text_output.clear()
 
     def register_logic(self):
         # Add function for Close button
@@ -35,9 +54,21 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # Add function for Select (Output) button
         self.button_output.clicked.connect(self.select_output)
+
+        # Add function for Create button
+        self.button_create.clicked.connect(self.create)
+
+        # Add function for Extract button
+        self.button_extract.clicked.connect(self.extract)
+
+        # Add function for Clear all button
+        self.button_clear.clicked.connect(self.reset)
         pass
 
     def select_input(self):
+        # Empty all other arguments
+        self.reset()
+
         # Ask user to choose a file
         self.input_file = QtWidgets.QFileDialog.getOpenFileName()[0]
 
@@ -78,6 +109,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             )
             # Set text on label
             self.label_input_status.setText("Valid file")
+            self.label_image_status.setText("Please select image")
+            self.label_output_status.setText("Please select output fil")
             # Set colour label
             self.label_input_status.setStyleSheet("QLabel { color : green; }")
             # Enable widgets
@@ -114,8 +147,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             self.label_image_status.setText("Valid image")
             self.label_image_status.setStyleSheet("QLabel { color: green; }")
-            self.write_output(
-                "[System] The image file is valid!")
+            self.write_output("[System] The image file is valid!")
 
             self.has_image = True
             self.enable_parametres()
@@ -139,14 +171,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             path.splitext(path.split(self.input_file)[-1])[0])
 
         # Add numbering in case file already exists
-        if not steg.check_file_availability(self.output_file + ".png"):
+        ext = "" if self.has_steg else ".png"
+        if not steg.check_file_availability(self.output_file + ext):
             i = 1
-            while not steg.check_file_availability(self.output_file +
-                                                   f"_{i}.png"):
+            while not steg.check_file_availability(self.output_file + f"_{i}" +
+                                                   ext):
                 i += 1
-            self.output_file += f"_{i}.png"
+            self.output_file += f"_{i}" + ext
         else:
-            self.output_file += ".png"
+            self.output_file += ext
 
         self.write_output("[System] Default output filename is: " +
                           self.output_file)
@@ -158,6 +191,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.label_output_status.setStyleSheet("QLabel { color: green; }")
         self.has_output = True
         self.enable_parametres()
+
+    def create(self):
+        self.write_output("[User] Start creating steganograph...")
+
+        pass
+
+    def extract(self):
+        self.write_output("[User] Start extracting steganograph...")
+        pass
+
+    def print_system_status(self):
+        self.write_output(f"[System] Status report:")
+        self.write_output(f"[System] Input file: {self.input_file}")
+        if self.has_steg:
+            self.write_output(f"[System] Image file: Not applicable")
+        else:
+            self.write_output(f"[System] Image file: {self.image_file}")
+        self.write_output(f"[System] Output file: {self.input_file}")
+        pass
 
     def enable_parametres(self):
         if self.has_steg and not self.has_output:
@@ -172,12 +224,31 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.check_stdout.setEnabled(1)
             self.check_nowrite.setEnabled(1)
             self.button_extract.setEnabled(1)
+
+            self.write_output(
+                "[System] Please enter the authentication key used during creation."
+            )
+            self.write_output(
+                "[System] Please check the appropriate options and click 'Extract' to start."
+            )
         else:
             self.field_authkey.setEnabled(1)
             self.spin_compress.setEnabled(1)
             self.spin_density.setEnabled(1)
             self.check_showim.setEnabled(1)
             self.button_create.setEnabled(1)
+
+            self.write_output(
+                "[System] Please enter the authentication key for creation.")
+            self.write_output(
+                "[System] The key is required to extract data from the steganograph later."
+            )
+            self.write_output(
+                "[Systen] Please choose a compression level and density for creation."
+            )
+            self.write_output(
+                "[System] Please check the appropriate options and click 'Create' to start."
+            )
 
     def disable_parametres(self):
         self.field_authkey.setDisabled(1)
