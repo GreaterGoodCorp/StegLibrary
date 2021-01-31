@@ -28,8 +28,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.image_file = ""
 
         self.field_input.setText("")
+        self.label_input_status.setText("Select input file")
+        self.label_input_status.setStyleSheet("")
         self.field_image.setText("")
+        self.label_image_status.setText("Not available")
+        self.label_image_status.setStyleSheet("")
         self.field_output.setText("")
+        self.label_output_status.setText("Not available")
+        self.label_output_status.setStyleSheet("")
         self.field_authkey.setText("")
         self.spin_compress.setValue(9)
         self.spin_density.setValue(1)
