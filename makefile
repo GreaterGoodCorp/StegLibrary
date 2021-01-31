@@ -26,23 +26,18 @@ prepare:
 	${PIP} install twine wheel
 
 test:
-	. .venv/bin/activate
 	pytest
 
 ui:
-	. .venv/bin/activate
 	pyuic5 StegLibrary/gui/gui.ui -o StegLibrary/gui/gui.py
 
 gui: ui
-	. .venv/bin/activate
 	${PYTHON} -m StegLibrary gui
 
 build: clean-build
-	. .venv/bin/activate
 	${PYTHON} setup.py sdist bdist_wheel
 
 upload: build
-	. .venv/bin/activate
 	${PYTHON} -m twine upload dist/*
 
 clean: clean-build clean-pyc clean-test
