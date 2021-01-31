@@ -31,7 +31,7 @@ test:
 
 ui:
 	. .venv/bin/activate
-	pyuic5 StegLibrary/gui.ui -o StegLibrary/gui.py
+	pyuic5 StegLibrary/gui/gui.ui -o StegLibrary/gui/gui.py
 
 gui: ui
 	. .venv/bin/activate
