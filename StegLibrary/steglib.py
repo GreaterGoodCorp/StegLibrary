@@ -355,8 +355,17 @@ def write_steg(
     if len(data) == 0:
         raise InputFileError("Input file is empty or exhausted!")
 
-    # Pre-process data file and read data
-    data = preprocess_data_file(data_file)
+    # Compress data
+    # 1. Type checking
+    if not isinstance(compression, int):
+        raise TypeError(f"Compression must be an integer (given {type(compression)} instead)")
+    # 2. Check if compression level is valid by compare with configuration
+    if compression not in Config.available_compression:
+        raise ValueError("Compression level not defined!")
+    # 3. Start compression, unless disabled by the caller
+    if compression > 0:
+        # Compress using the builtin bzip2 library
+        data = bz2.compress(data, compresslevel=compression)
 
     # Compress data (if needed)
     if compression > 0:
