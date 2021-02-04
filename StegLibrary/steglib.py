@@ -271,11 +271,7 @@ def write_output_data(data: bytes, output_file: str) -> bool:
     return True
 
 
-def write_steg(data_file: str, image_file: str, key: str, compression: int,
-               density: int, output_file: str) -> bool:
-    """Write a steganograph
 
-    * Positional arguments:
 
 def write_steg(
     input_file: Union[io.RawIOBase, io.BufferedIOBase],
