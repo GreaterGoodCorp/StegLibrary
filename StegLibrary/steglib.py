@@ -367,11 +367,24 @@ def write_steg(
         # Compress using the builtin bzip2 library
         data = bz2.compress(data, compresslevel=compression)
 
-    # Compress data (if needed)
-    if compression > 0:
-        data = str(base64.b64encode(bz2.compress(data, compression)), "utf-8")
-    else:
-        data = str(data, "utf-8")
+    # Encrypt data
+    # 1. Type checking
+    if not isinstance(auth_key, str):
+        raise TypeError(f"Authentication key must be a string (given {type(auth_key)} instead)")
+    # 2. Make salt
+    salt, salt_str = make_salt()
+    # 3. Make KDF
+    kdf = create_kdf(salt)
+    # 4. Derive key from auth_key
+    # Authentication key will be encoded first to pass to KDF.
+    key = kdf.derive(auth_key.encode())
+    # 5. Build Fernet
+    # Fernet is a simple, symmetric (secret key) authenticated cryptography.
+    # a.k.a, it is secure and easy to implement.
+    fn = build_fernet(key)
+    # 6. Start encryption
+    # Data will be passed through Fernet
+    data = fn.encrypt(data)
 
     # Create header and append header
     header = Header(len(data), compression, density, key).header
