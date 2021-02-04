@@ -352,7 +352,9 @@ def write_steg(
     # Compress data
     # 1. Type checking
     if not isinstance(compression, int):
-        raise TypeError(f"Compression must be an integer (given {type(compression)} instead)")
+        raise TypeError(
+            f"Compression must be an integer (given {type(compression)} instead)"
+        )
     # 2. Check if compression level is valid by compare with configuration
     if compression not in Config.available_compression:
         raise ValueError("Compression level not defined!")
@@ -364,7 +366,9 @@ def write_steg(
     # Encrypt data
     # 1. Type checking
     if not isinstance(auth_key, str):
-        raise TypeError(f"Authentication key must be a string (given {type(auth_key)} instead)")
+        raise TypeError(
+            f"Authentication key must be a string (given {type(auth_key)} instead)"
+        )
     # 2. Make salt
     salt, salt_str = make_salt()
     # 3. Make KDF
