@@ -20,10 +20,6 @@ class Header:
     # Separator is used to make regex easier
     separator = "?"
 
-    # A default authentication key
-    # To meet the API requirement
-    default_key = "steganography"
-
     # Various types of length for the header
     metadata_length = 12
     key_hash_length = 4
