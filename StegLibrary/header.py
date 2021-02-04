@@ -25,9 +25,10 @@ class Header:
     header_length = maximum_data_length + maximum_flag_length + salt_length + separator_length
 
     # Regex pattern of the header
-    # TODO: Make a function to generate pattern on-demand
-    # when the header structure changes
-    pattern = r"^S(\d{1,6})\?([a-f\d]{2})\?([a-f\d]{4})T-*$"
+    # data_length?flag?salt
+    pattern = r"(\d{1,8})\?(\d{1,3})\?"
+    hash_pattern = r"((?:[A-Za-z0-9+/]{4})+(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?){24}"
+    pattern = re.compile(f"^{pattern + hash_pattern}$")
 
     def __str__(self) -> str:
         """Returns the header."""
