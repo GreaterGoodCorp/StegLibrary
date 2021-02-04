@@ -271,8 +271,6 @@ def write_output_data(data: bytes, output_file: str) -> bool:
     return True
 
 
-
-
 def write_steg(
     input_file: Union[io.RawIOBase, io.BufferedIOBase],
     image_file: Image.Image,
