@@ -24,9 +24,6 @@ class Header:
     separator_length = 2
     header_length = maximum_data_length + maximum_flag_length + salt_length + separator_length
 
-    # Available density for steganograph
-    available_density = (1, 2, 3)
-
     # Regex pattern of the header
     # TODO: Make a function to generate pattern on-demand
     # when the header structure changes
