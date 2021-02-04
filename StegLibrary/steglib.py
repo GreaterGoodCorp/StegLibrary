@@ -277,34 +277,60 @@ def write_steg(data_file: str, image_file: str, key: str, compression: int,
 
     * Positional arguments:
 
-    data_file -- Path to data file
+def write_steg(
+    input_file: Union[io.RawIOBase, io.BufferedIOBase],
+    image_file: Image.Image,
+    output_file: Union[io.RawIOBase, io.BufferedIOBase],
+    *,
+    auth_key: str = Config.default_auth_key,
+    compression: int = Config.default_compression,
+    density: int = Config.default_density,
+    close_on_exit: bool = Config.flag_close_on_exit,
+) -> bool:
+    """Performs steaganography on input file and write data to image file.
 
-    image_file -- Path to image file
+    ### Positional arguments
 
-    key -- Authentication key
+    - input_file (io.RawIOBase | io.BufferedIOBase)
+        - A readable file-like object of the input file
 
-    compression -- Compression level
+    - image_file (PIL.Image.Image)
+        - An opened image object
 
-    density -- Density level
+    - output_file (io.RawIOBase | io.BufferedIOBase)
+        - A writable file-like object of the output file
 
-    output_file -- Path to output file
+    ### Keyword arguments
 
-    * Raises:
+    - auth_key (str) (default = Config.default_auth_key)
+        - The authentication key
+    
+    - compression (int) (default = Config.default_compression)
+        - The compression level
 
-    TypeError: Raised when the parametres are of incorrect types
+    - density (int) (default = Config.default_density)
+        - The data density
 
-    ImageFileValidationError: Raised when image validation failed
+    - close_on_exit (bool) (default = Config.flag_close_on_exit)
+        - Whether to close the file objects on exit
 
-    DataFileValidationError: Raised when data validation failed
+    ### Return values
 
-    InsufficientStorageError: Raised when there is insufficient storage
+    True if the operation is successful, otherwise False
 
-    UnavailableFileError: Raised when the output file already exists
+    ### Raises
 
-    * Returns:
+    - TypeError
+        - Raised when the parametres given are in incorrect types
 
-    True if a stegnograph has been successfully created and written on disks
+    - InputFileError
+        - Raised when there is an I/O error when trying to read the input file
 
+    - OutputFileError
+        - Raised when there is an I/O error when trying to write the output file
+
+    - InsufficientStorageError
+        - Raised when the input file contains more data than the maximum storage
     """
 
     # Validate the (path to) image file and data file
