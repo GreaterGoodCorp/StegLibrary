@@ -40,7 +40,7 @@ class Header:
             "data_length": self.data_length,
             "compression": self.compression,
             "density": self.density,
-            "key": self.key,
+            "salt": self.salt,
         }
 
     def __repr__(self) -> str:
