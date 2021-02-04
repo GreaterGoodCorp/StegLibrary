@@ -18,9 +18,11 @@ class Header:
     separator = "?"
 
     # Various types of length for the header
-    metadata_length = 12
-    key_hash_length = 4
-    header_length = metadata_length + key_hash_length
+    maximum_data_length = 8
+    maximum_flag_length = 3
+    salt_length = 24
+    separator_length = 2
+    header_length = maximum_data_length + maximum_flag_length + salt_length + separator_length
 
     # Available density for steganograph
     available_density = (1, 2, 3)
