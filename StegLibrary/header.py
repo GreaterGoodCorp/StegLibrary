@@ -4,6 +4,7 @@
 import re
 import hashlib
 from StegLibrary.errors import HeaderError
+from StegLibrary.config import SteganographyConfig as Config
 
 
 class Header:
