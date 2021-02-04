@@ -68,23 +68,10 @@ class Header:
         # Bit 1 - 0: Density level (1 - 3)
         flag = (self.compression << 2) + self.density
 
-        # Mix flag in between key hash
-        # Making it less obvious
-        # Include a separator for easy parsing
-        middle = int(self.key_hash_length / 2)
-        mixer = self.key_hash[:middle] + Header.separator
-        mixer += str(flag) + self.key_hash[middle:]
+        result_header = Header.separator.join(
+            (str(self.data_length), str(flag), hash))
 
-        # Put the mixer together with the data length
-        # Include a padding as separator for easy parsing
-        result_header = str(self.data_length) + Header.separator + mixer
-
-        # Embed signature
-        result_header = Header.signature.format(result_header)
-
-        # Pad the resulting header to ensure correct length
-        result_header += Header.padding_character * \
-            (self.header_length - len(result_header))
+        assert Header.pattern.match(result_header)
 
         # Assign as a class attribute
         self.header = result_header
