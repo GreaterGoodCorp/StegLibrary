@@ -90,7 +90,7 @@ class Header:
             return False
 
         # Perform pattern check
-        if re.match(Header.pattern, header):
+        if Header.pattern.match(header):
             return True
 
         return False
