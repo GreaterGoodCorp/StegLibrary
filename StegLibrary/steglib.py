@@ -395,8 +395,14 @@ def write_steg(
     # 2. Serialise header and prepend data with header
     data = bytes(header, "utf-8") + data
 
-    # Serialise data
-    data = bytes(data, "utf-8")
+    # Retrieve access to pixel data
+    # 1. Type guarding
+    try:
+        # 2. Load PixelAccess
+        pix = image_file.load()
+    except AttributeError:
+        raise TypeError(
+            f"Image file must be a PIL.Image.Image (given {type(image_file)})")
 
     # Read and retrieve image data
     image = retrieve_image(image_file)
