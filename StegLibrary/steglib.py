@@ -3,12 +3,16 @@
 # an option to enable password verification.
 
 # Builtins
+import io
 import bz2
 import base64
 import imghdr
 from os import path
+from typing import Union
 
-from StegLibrary import Header
+from StegLibrary.config import SteganographyConfig as Config
+from StegLibrary.crypto import make_salt, create_kdf, build_fernet
+from StegLibrary.header import build_header
 from StegLibrary.errors import *
 from StegLibrary.helper import err_imp
 
