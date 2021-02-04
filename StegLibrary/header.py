@@ -147,3 +147,42 @@ class Header:
 
         # Return the resulting dictionary
         return result_dict
+
+
+def build_header(
+    *,
+    data_length: int,
+    compression: int = Config.default_compression,
+    density: int = Config.default_density,
+    salt: str,
+) -> Header:
+    """Builds the steganograph header with given data.
+
+    ### Positional arguments
+
+    - data_length (int)
+        - The length of the steganograph (excluding the header)
+
+    - compression (int) (default = Config.default_compression)
+        - The compression level
+
+    - density (int) (default = Config.default_density)
+        - The data density
+
+    - salt (str)
+        - The 24-character salt string
+
+    ### Returns
+
+    A Header object containing all the data given
+    """
+
+    # Initialise the Header instance
+    header = Header(
+        data_length=data_length,
+        compression=compression,
+        density=density,
+        salt=salt,
+    )
+
+    return header.header
