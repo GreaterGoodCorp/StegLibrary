@@ -47,37 +47,13 @@ class Header:
         """Same as __str__, returns the header."""
         return str(self)
 
-    def __init__(self, data_length: int, compression: int, density: int, key: str) -> None:
-        """
-        Initilises a Header instance.
-
-        * Positional arguments:
-
-        data_length -- The (compressed) length (excluding header length) of the steganograph's data
-
-        compression -- The level of data compression
-
-        density -- The density level of the steganograph
-
-        key_hash -- The hash of the validation key
-
-        * Raises:
-
-        HeaderError: Raised when the density requested is invalid
-        """
+    def __init__(self, data_length: int, compression: int, density: int,
+                 salt: str) -> None:
         self.data_length = data_length
         self.compression = compression
-
-        # Check if the requested density is allowed
-        if density not in Header.available_density:
-            raise HeaderError("InvalidDensity")
         self.density = density
+        self.salt = salt
 
-        # Generate key hash with required length from key
-        self.key_hash = hashlib.md5(key.encode()).hexdigest()[
-            :Header.key_hash_length]
-
-        # Generate header
         self.generate()
 
     def generate(self) -> None:
