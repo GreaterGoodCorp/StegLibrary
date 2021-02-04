@@ -7,3 +7,20 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from os import urandom
 from typing import Tuple
 
+
+def make_salt() -> Tuple[bytes, str]:
+    """Makes a random salt for KDF.
+
+    ### Returns
+
+    - bytes
+        - A 16-byte salt
+
+    - str
+        - A base64-encoded string representation of the salt
+    """
+    # Generate a cryptographically secure random bytes
+    salt = urandom(16)
+
+    # Return the salt with the base64 string
+    return salt, str(b64encode(salt), "utf-8")
