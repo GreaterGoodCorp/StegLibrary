@@ -9,10 +9,6 @@ from StegLibrary.errors import HeaderError
 class Header:
     """Provides for the preparation of the creation of steganographs."""
 
-    # Signature for the header
-    # Serve mainly as a decoration for now
-    signature = "S{}T"
-
     # Padding character, used when header is too short
     # after writing all the required metadata
     padding_character = "-"
