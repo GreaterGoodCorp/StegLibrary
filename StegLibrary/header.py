@@ -96,9 +96,8 @@ class Header:
         return False
 
     @staticmethod
-    def parse(header: str, key: str, validate_only: bool = False) -> dict:
-        """
-        Parses header into original metadata.
+    def parse(header: str, key: str) -> dict:
+        """Parses header string into original header data.
 
         * Positional arguments:
 
@@ -141,8 +140,8 @@ class Header:
             return result_dict
 
         # Validate key hash
-        key_hash = hashlib.md5(key.encode()).hexdigest()[
-            :Header.key_hash_length]
+        key_hash = hashlib.md5(
+            key.encode()).hexdigest()[:Header.key_hash_length]
         if key_hash != result_dict["key_hash"]:
             raise HeaderError("AuthError")
 
