@@ -384,9 +384,16 @@ def write_steg(
     # Data will be passed through Fernet
     data = fn.encrypt(data)
 
-    # Create header and append header
-    header = Header(len(data), compression, density, key).header
-    data = header + data
+    # Craft the finished data
+    # 1. Build a header for the steganograph
+    header = build_header(
+        data_length=len(data),
+        compression=compression,
+        density=density,
+        salt=salt_str,
+    )
+    # 2. Serialise header and prepend data with header
+    data = bytes(header, "utf-8") + data
 
     # Serialise data
     data = bytes(data, "utf-8")
