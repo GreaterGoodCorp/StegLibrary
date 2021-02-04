@@ -333,14 +333,27 @@ def write_steg(
         - Raised when the input file contains more data than the maximum storage
     """
 
-    # Validate the (path to) image file and data file
-    validate_image_file(image_file)
-    validate_data_file(data_file)
+    # Validate input file
+    # 1. Type guard
+    try:
+        # 2. Check that the file can be read.
+        if not input_file.readable():
+            raise InputFileError("Input file is not readable!")
+    except AttributeError:
+        raise InputFileError("Input file must be a readable file-like object!")
 
-    # Check file availability
-    if not check_file_availability(output_file):
-        # If file is already taken, raise error
-        raise UnavailableFileError()
+    # Read data from input file
+    # 1. Return to the starting index first, to avoid exhaustion.
+    input_file.seek(0)
+    # 2. Read data to memory
+    # This can return a bytes object or a NoneType.
+    data = input_file.read()
+    # 3. Check that the data is not None
+    if isinstance(data, None):
+        raise InputFileError("Input file is not readable!")
+    # 4. Check that the data is non-empty
+    if len(data) == 0:
+        raise InputFileError("Input file is empty or exhausted!")
 
     # Pre-process data file and read data
     data = preprocess_data_file(data_file)
