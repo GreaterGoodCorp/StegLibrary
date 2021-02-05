@@ -144,3 +144,36 @@ def is_bit_set(i: int, pos: int) -> bool:
     # will be a non-zero number, 0 otherwise. Hence, the bit is set if the result is
     # non-zero, unset otherwise
     return i & (1 << pos)
+
+def set_bit(i: int, pos: int) -> int:
+    """Sets a bit of an integer at the given index.
+
+    ### Positional arguments
+    - i (int)
+        - An integer to set
+    - pos (int)
+        - Position of the bit to set (indexed from the last significant bit)
+
+    ### Returns
+    
+    An integer, with the bit at the position set.
+
+    ### Raises
+
+    - TypeError
+        - Raised when the parametres are of incorrect type
+    """
+    # Type checking
+    if not (isinstance(i, int) and isinstance(pos, int)):
+        raise TypeError(f"Must be an integer (given {type(i)} instead)")
+
+    # Check if the bit is set
+    if is_bit_set(i, pos):
+        # If bit is already set, ignore and return
+        return i
+    else:
+        # If bit is not set, set the bit by adding into it 1 << pos
+        # or 2 ** pos. For example, given an integer i = 10011001, in
+        # order to set bit at pos = 5, add n = 00100000 to i. After
+        # this, the bit will be set (i = 10111001).
+        return i + (1 << pos)
