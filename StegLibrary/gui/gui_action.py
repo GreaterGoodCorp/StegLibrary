@@ -319,10 +319,3 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def write_output(self, msg: str):
         self.text_output.appendPlainText(msg)
-
-
-def execute_gui():
-    app = QtWidgets.QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec())
