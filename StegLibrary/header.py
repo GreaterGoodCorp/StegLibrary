@@ -218,3 +218,57 @@ def validate_header(b: bytes) -> bool:
         return True if Header.pattern.match(s) else False
     except UnicodeDecodeError:
         return False
+
+
+def parse_header(b: bytes) -> Header:
+    """Parse a bytes string into a Header object.
+
+    ### Postional arguments
+
+    - b (bytes)
+        - The bytes string to parse
+
+    ### Returns
+
+    A Header object from the bytes string
+
+    ### Raises
+
+    - TypeError
+        - Raised when the parametres given are in incorrect types
+
+    - UnrecognisedHeaderError
+        - Raised when failing to parse a header.
+    """
+    # Type checking
+    if not isinstance(b, bytes):
+        raise TypeError(f"Must be a bytes string (given {type(b)})")
+
+    # Validate header first
+    if not validate_header(b):
+        raise UnrecognisedHeaderError("Invalid header!")
+
+    # Generate Match object of the header
+    # Decode bytes string to string first
+    header_match = Header.pattern.match(str(b, "utf-8"))
+
+    # Extract data from capturing groups
+    # Ignore first capturing groups
+    # 1. Data length
+    hdr_data_length = int(header_match[1])
+    # 2. Setting flag
+    hdr_flag = int(header_match[2])
+    # 3. Salt
+    hdr_salt = header_match[3]
+
+    # Process flag
+    hdr_density = hdr_flag & 0b11
+    hdr_compression = (hdr_flag - hdr_density) >> 2
+
+    # Build and return a Header object
+    return build_header(
+        data_length=hdr_data_length,
+        compression=hdr_compression,
+        density=hdr_density,
+        salt=hdr_salt
+    )
