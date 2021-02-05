@@ -1,7 +1,7 @@
 from StegLibrary.header import Header
 from os import path
 
-from StegLibrary.errors import SteganographyError, ImageFileValidationError
+from StegLibrary.errors import SteganographyError
 from StegLibrary.gui import Ui_MainWindow
 import StegLibrary.steglib as steg
 import webbrowser
