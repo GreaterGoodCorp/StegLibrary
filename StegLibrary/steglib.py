@@ -9,11 +9,33 @@ import base64
 from typing import Union
 
 # Internal modules
-from StegLibrary import cfg
-from StegLibrary.crypto import make_salt, create_kdf, build_fernet
-from StegLibrary.header import build_header
-from StegLibrary.errors import *
-from StegLibrary.helper import err_imp, is_bit_set, set_bit, show_image, unset_bit
+from StegLibrary import SteganographyConfig as cfg
+from StegLibrary.crypto import (
+    make_salt,
+    create_kdf,
+    build_fernet,
+    InvalidToken
+)
+from StegLibrary.crypto.salt import extract_raw_salt
+from StegLibrary.header import (
+    Header,
+    build_header,
+    parse_header
+)
+from StegLibrary.errors import (
+    InputFileError,
+    InsufficientStorageError,
+    UnrecognisedHeaderError,
+    AuthenticationError,
+    OutputFileError,
+)
+from StegLibrary.helper import (
+    err_imp,
+    is_bit_set,
+    set_bit,
+    show_image,
+    unset_bit
+)
 
 # Non-builtin modules
 try:
