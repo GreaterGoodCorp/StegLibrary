@@ -189,3 +189,32 @@ def build_header(
     )
 
     return header.header
+
+
+def validate_header(b: bytes) -> bool:
+    """Check if the bytes string contains valid Header.
+
+    ### Positional arguments
+
+    - b (bytes)
+        - The bytes string to check
+
+    ### Returns
+
+    True if a Header is present, otherwise False
+
+    ### Raises
+
+    - TypeError
+        - Raised when the parametres given are in incorrect types
+    """
+    # Type checking
+    if not isinstance(b, bytes):
+        raise TypeError(f"Must be a bytes string (given {type(b)})")
+
+    # Try to decode into string
+    try:
+        s = str(b, "utf-8")
+        return True if Header.pattern.match(s) else False
+    except UnicodeDecodeError:
+        return False
