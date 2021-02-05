@@ -1,9 +1,12 @@
+# Builtin modules
+from base64 import urlsafe_b64encode
+
 # Internal modules
 from StegLibrary.helper import err_imp
 
 # Non-builtin modules
 try:
-    from cryptography.fernet import Fernet
+    from cryptography.fernet import Fernet, InvalidToken
 except ImportError:
     err_imp("cryptography")
     exit(1)
