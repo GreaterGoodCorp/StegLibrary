@@ -6,7 +6,6 @@
 import io
 import bz2
 import base64
-from os import path
 from typing import Union
 
 # Internal modules
@@ -18,7 +17,7 @@ from StegLibrary.helper import err_imp, is_bit_set, set_bit, show_image, unset_b
 
 # Non-builtin modules
 try:
-    from PIL import Image, UnidentifiedImageError
+    from PIL import Image
 except ImportError:
     err_imp("Pillow")
     exit(1)
