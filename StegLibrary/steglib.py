@@ -14,7 +14,7 @@ from StegLibrary.config import SteganographyConfig as Config
 from StegLibrary.crypto import make_salt, create_kdf, build_fernet
 from StegLibrary.header import build_header
 from StegLibrary.errors import *
-from StegLibrary.helper import err_imp
+from StegLibrary.helper import err_imp, is_bit_set, set_bit, unset_bit
 
 # Extra
 try:
