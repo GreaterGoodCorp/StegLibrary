@@ -405,7 +405,7 @@ def write_steg(
             f"Image file must be a PIL.Image.Image (given {type(image_file)})")
         
     # Retrieve metadata of image file
-    x_dim, y_dim = image.size
+    x_dim, y_dim = image_file.size
 
     # Check if the image has enough room to store data
     # 1. Find the number of writable pixels
