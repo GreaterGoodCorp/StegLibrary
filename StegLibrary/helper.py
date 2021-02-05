@@ -1,6 +1,13 @@
 import re
 
 
+try:
+    from PIL import Image
+except ImportError:
+    err_imp("Pillow")
+    exit(1)
+
+
 class ANSIFormatter:
     """
     ANSIFormatter provides all ANSI formatting options
