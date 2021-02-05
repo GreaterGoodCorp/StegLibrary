@@ -1,3 +1,4 @@
+# Builtin modules
 import re
 
 
@@ -7,6 +8,7 @@ def err_imp(pkg_name):
     return ANSIFormatter.extendedPrint(s, ansi=ANSIFormatter.Red)
 
 
+# Non builtin modules
 try:
     from PIL import Image
 except ImportError:
