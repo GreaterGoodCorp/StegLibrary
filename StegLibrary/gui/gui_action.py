@@ -4,7 +4,6 @@ from os import path
 from StegLibrary.errors import SteganographyError, ImageFileValidationError
 from StegLibrary.gui import Ui_MainWindow
 import StegLibrary.steglib as steg
-import sys
 import webbrowser
 from PIL import Image
 from PyQt5 import QtWidgets
