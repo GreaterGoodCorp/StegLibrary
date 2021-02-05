@@ -1,8 +1,14 @@
-from StegLibrary import write_steg, extract_steg, Header, execute_gui
-from StegLibrary.helper import err_imp
-import os
-from os import path
 
+# Builtin modules
+from os import path, getcwd
+
+# Internal modules
+from StegLibrary import write_steg, extract_steg
+from StegLibrary.header import Header
+from StegLibrary.helper import err_imp
+from StegLibrary.gui import execute_gui
+
+# Non-builtin modules
 try:
     import click
 except ImportError:
@@ -29,11 +35,11 @@ def create(image: str, key: str, compress: int, pack: int, output: str, data: st
 
     if not path.isabs(image):
         # Get the absolute path for the user-specified image
-        image = path.join(os.getcwd(), *path.split(image))
+        image = path.join(getcwd(), *path.split(image))
 
     if not path.isabs(data):
         # Get the absolute path for the user-specified data file
-        data = path.join(os.getcwd(), *path.split(data))
+        data = path.join(getcwd(), *path.split(data))
 
     if output == None:
         # Get the absolute path for the default output file
@@ -42,7 +48,7 @@ def create(image: str, key: str, compress: int, pack: int, output: str, data: st
         output = name_no_ext + ".png"
     elif not path.isabs(output):
         # Get the absolute path for the user-specified output file
-        output = path.join(os.getcwd(), *path.split(output))
+        output = path.join(getcwd(), *path.split(output))
 
     write_steg(data, image, key, compress, pack, output)
 
@@ -55,7 +61,7 @@ def create(image: str, key: str, compress: int, pack: int, output: str, data: st
 def extract(key: str, output: str, stdout: bool, steganograph: str):
     if not path.isabs(steganograph):
         # Get the absolute path for the steganograph
-        steganograph = path.join(os.getcwd(), *path.split(steganograph))
+        steganograph = path.join(getcwd(), *path.split(steganograph))
 
     if output == None:
         # Get the absolute path of the default output file
