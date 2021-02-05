@@ -121,6 +121,27 @@ class ANSIFormatter:
             return print(obj_str, *args, **kwargs)
 
 
+def show_image(image: Image.Image) -> None:
+    """Show this Image object on screen
+
+    ### Positional arguments
+
+    - image (PIL.Image.Image)
+        - The Image object to be shown
+
+    ### Returns
+
+    None
+    """
+    # 1. Type guarding
+    try:
+        # 2. Show the image using a builtin functions
+        image.show("Demo")
+        return
+    except AttributeError:
+        raise TypeError(f"Invalid image type (given {type(image)}")
+
+
 def err_imp(pkg_name):
     s = f"[Package] This package is not installed: {pkg_name}"
     return ANSIFormatter.extendedPrint(s, ansi=ANSIFormatter.Red)
