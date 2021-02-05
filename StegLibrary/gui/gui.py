@@ -25,10 +25,10 @@ class Ui_MainWindow(object):
         MainWindow.setStatusTip("")
         MainWindow.setWhatsThis("")
         MainWindow.setStyleSheet("QGroupBox {\n"
-"    border: 2px solid gray;\n"
-"    border-radius: 5px;\n"
-"}\n"
-"")
+                                 "    border: 2px solid gray;\n"
+                                 "    border-radius: 5px;\n"
+                                 "}\n"
+                                 "")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -237,18 +237,26 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "StegLibrary GUI"))
-        self.group_file_selection.setTitle(_translate("MainWindow", "File selection"))
-        self.label_input_status.setText(_translate("MainWindow", "Please select input file"))
+        self.group_file_selection.setTitle(
+            _translate("MainWindow", "File selection"))
+        self.label_input_status.setText(_translate(
+            "MainWindow", "Please select input file"))
         self.button_image.setText(_translate("MainWindow", "Select"))
         self.button_input.setText(_translate("MainWindow", "Select"))
-        self.label_output.setText(_translate("MainWindow", "Path to output file"))
-        self.label_image_status.setText(_translate("MainWindow", "Please select image file"))
+        self.label_output.setText(_translate(
+            "MainWindow", "Path to output file"))
+        self.label_image_status.setText(_translate(
+            "MainWindow", "Please select image file"))
         self.button_output.setText(_translate("MainWindow", "Select"))
-        self.label_output_status.setText(_translate("MainWindow", "Please select output file"))
-        self.label_image.setText(_translate("MainWindow", "Path to image file"))
-        self.label_input.setText(_translate("MainWindow", "Path to input file"))
+        self.label_output_status.setText(_translate(
+            "MainWindow", "Please select output file"))
+        self.label_image.setText(_translate(
+            "MainWindow", "Path to image file"))
+        self.label_input.setText(_translate(
+            "MainWindow", "Path to input file"))
         self.group_parametre.setTitle(_translate("MainWindow", "Parametres"))
-        self.check_stdout.setText(_translate("MainWindow", "Redirect output here on extraction (for text only)"))
+        self.check_stdout.setText(_translate(
+            "MainWindow", "Redirect output here on extraction (for text only)"))
         self.group_action.setTitle(_translate("MainWindow", "Action"))
         self.button_create.setText(_translate("MainWindow", "Create"))
         self.button_create.setShortcut(_translate("MainWindow", "Meta+C"))
@@ -256,10 +264,13 @@ class Ui_MainWindow(object):
         self.button_extract.setShortcut(_translate("MainWindow", "Meta+E"))
         self.button_clear.setText(_translate("MainWindow", "Clear all"))
         self.button_clear.setShortcut(_translate("MainWindow", "Meta+X"))
-        self.label_compress.setText(_translate("MainWindow", "Compression level"))
+        self.label_compress.setText(_translate(
+            "MainWindow", "Compression level"))
         self.label_density.setText(_translate("MainWindow", "Data density"))
-        self.check_showim.setText(_translate("MainWindow", "Show image on creation"))
-        self.label_authkey.setText(_translate("MainWindow", "Authentication key"))
+        self.check_showim.setText(_translate(
+            "MainWindow", "Show image on creation"))
+        self.label_authkey.setText(_translate(
+            "MainWindow", "Authentication key"))
         self.group_output.setTitle(_translate("MainWindow", "Output"))
         self.menu_file.setTitle(_translate("MainWindow", "File"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))

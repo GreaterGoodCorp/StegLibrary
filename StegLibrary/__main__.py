@@ -64,6 +64,7 @@ def extract(key: str, output: str, stdout: bool, steganograph: str):
 
     extract_steg(steganograph, output, key, stdout)
 
+
 @steg.command("gui", help="Run the Graphical User Interface")
 def gui():
     execute_gui()

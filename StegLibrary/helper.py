@@ -153,18 +153,18 @@ def err_imp(pkg_name):
 
 def is_bit_set(i: int, pos: int) -> bool:
     """Checks if bit is set
-    
+
     ### Positional arguments
     - i (int)
         - An integer to check
     - pos (int)
        - Position of the bit to check (indexed from the last significant bit)
-        
+
     ### Returns
     True if bit is set, otherwise False
-    
+
     ### Raises
-    
+
     - TypeError
         - Raised when the parametres are of incorrect type
     """
@@ -193,7 +193,7 @@ def set_bit(i: int, pos: int) -> int:
         - Position of the bit to set (indexed from the last significant bit)
 
     ### Returns
-    
+
     An integer, with the bit at the position set.
 
     ### Raises
@@ -227,7 +227,7 @@ def unset_bit(i: int, pos: int) -> int:
         - Position of the bit to unset (indexed from the last significant bit)
 
     ### Returns
-    
+
     An integer, with the bit at the position unset.
 
     ### Raises

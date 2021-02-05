@@ -22,6 +22,7 @@ def make_salt() -> Tuple[bytes, str]:
     # Return the salt with the base64 string
     return salt, str(b64encode(salt), "utf-8")
 
+
 def extract_raw_salt(salt_str: str) -> bytes:
     """Extract raw salt from the given salt string.
 

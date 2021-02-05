@@ -8,6 +8,7 @@ except ImportError:
     err_imp("cryptography")
     exit(1)
 
+
 def build_fernet(key: bytes) -> Fernet:
     """Build a Fernet object to encrypt or decrypt data from the key.
 

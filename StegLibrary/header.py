@@ -24,7 +24,8 @@ class Header:
     maximum_flag_length = 3
     salt_length = 24
     separator_length = 2
-    header_length = maximum_data_length + maximum_flag_length + salt_length + separator_length
+    header_length = maximum_data_length + \
+        maximum_flag_length + salt_length + separator_length
 
     # Regex pattern of the header
     # data_length?flag?salt
