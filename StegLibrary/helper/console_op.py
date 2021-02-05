@@ -1,19 +1,5 @@
 # Builtin modules
-import re
-
-
-# Mandatory functions
-def err_imp(pkg_name):
-    s = f"[Package] This package is not installed: {pkg_name}"
-    return ANSIFormatter.extendedPrint(s, ansi=ANSIFormatter.Red)
-
-
-# Non builtin modules
-try:
-    from PIL import Image
-except ImportError:
-    err_imp("Pillow")
-    exit(1)
+from re import match
 
 
 class ANSIFormatter:
@@ -88,7 +74,7 @@ class ANSIFormatter:
         """Check if the ANSI modifier is valid"""
         if type(code) != str:
             raise TypeError("ANSI code must be a string!")
-        return True if re.match(r"^\u001b\[\d+;?\d*;?\d*m$", code) else False
+        return True if match(r"^\u001b\[\d+;?\d*;?\d*m$", code) else False
 
     @staticmethod
     def extendedPrint(obj, *args, **kwargs):
@@ -124,27 +110,6 @@ class ANSIFormatter:
                         raise ValueError(
                             "ANSI code or colour name must be a string!")
             return print(obj_str, *args, **kwargs)
-
-
-def show_image(image: Image.Image) -> None:
-    """Show this Image object on screen
-
-    ### Positional arguments
-
-    - image (PIL.Image.Image)
-        - The Image object to be shown
-
-    ### Returns
-
-    None
-    """
-    # 1. Type guarding
-    try:
-        # 2. Show the image using a builtin functions
-        image.show("Demo")
-        return
-    except AttributeError:
-        raise TypeError(f"Invalid image type (given {type(image)}")
 
 
 def err_imp(pkg_name):
