@@ -2,8 +2,7 @@
 # create and maintain the header of each steganograph.
 
 # Builtin modules
-import re
-import hashlib
+from re import compile
 
 # Internal modules
 from StegLibrary import SteganographyConfig as Config
@@ -32,7 +31,7 @@ class Header:
     # data_length?flag?salt
     pattern = r"(\d{1,8})\?(\d{1,3})\?"
     hash_pattern = r"((?:[A-Za-z0-9+/]{4})+(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?){24}"
-    pattern = re.compile(f"^{pattern + hash_pattern}$")
+    pattern = compile(f"^{pattern + hash_pattern}$")
 
     def __str__(self) -> str:
         """Returns the header."""
