@@ -34,4 +34,5 @@ def build_fernet(key: bytes) -> Fernet:
         raise TypeError(f"The key must be in bytes (given {type(key)})")
 
     # Initialise and return a Fernet object
-    return Fernet(key)
+    # Key will be Base64-encoded first
+    return Fernet(urlsafe_b64encode(key))
