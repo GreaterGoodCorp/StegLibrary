@@ -403,7 +403,7 @@ def write_steg(
     except AttributeError:
         raise TypeError(
             f"Image file must be a PIL.Image.Image (given {type(image_file)})")
-        
+
     # Retrieve metadata of image file
     x_dim, y_dim = image_file.size
 
@@ -481,7 +481,7 @@ def write_steg(
         input_file.close()
         image_file.close()
         output_file.close()
-    
+
     # At this step, operation is successful, so return True
     return True
 
