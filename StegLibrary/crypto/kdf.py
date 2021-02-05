@@ -10,6 +10,7 @@ except ImportError:
     err_imp("cryptography")
     exit(1)
 
+
 def create_kdf(salt: bytes) -> PBKDF2HMAC:
     """Builds a key derive function with the salt given.
 
