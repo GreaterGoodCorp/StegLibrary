@@ -11,5 +11,5 @@ class InputFileError(SteganographyError):
     """
     This class inherits from the base SteganographyError class.
 
-    Raised when there is an I/O error when trying to read the input file
+    Raised when there is an I/O error when trying to read the input file.
     """
