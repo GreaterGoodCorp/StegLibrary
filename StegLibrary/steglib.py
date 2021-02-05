@@ -72,7 +72,7 @@ def write_steg(
 
     - auth_key (str) (default = cfg.default_auth_key)
         - The authentication key
-    
+
     - compression (int) (default = cfg.default_compression)
         - The compression level
 
@@ -352,6 +352,82 @@ def extract_header(image: Image.Image) -> Header:
             density += 1
             result_data = b""
             x, y, count = 0, 0, 0
+
+
+def extract_steg(
+    input_file: Union[RawIOBase, BufferedIOBase],
+    output_file: List[Union[RawIOBase, BufferedIOBase, TextIOBase]],
+    *,
+    auth_key: str = cfg.default_auth_key,
+    close_on_exit: bool = cfg.flag_close_on_exit,
+) -> bool:
+    """Extract steaganography on input file and write data to output file.
+
+    ### Positional arguments
+
+    - input_file (RawIOBase | BufferedIOBase)
+        - A readable file-like object of the input file
+
+    - output_file (List[RawIOBase | BufferedIOBase | TextIOBase])
+        - A list of writable file-like object(s) of the output file
+        - NOTE: If sys.stdout (or any TextIOBase) is given, output
+        will only be written if binary data can be decoded into string.
+
+    ### Keyword arguments
+
+    - auth_key (str) (default = cfg.default_auth_key)
+        - The authentication key
+
+    - close_on_exit (bool) (default = Config.flag_close_on_exit)
+        - Whether to close the file objects on exit
+
+    ### Return values
+
+    True if the operation is successful, otherwise False
+
+    ### Raises
+
+    - TypeError
+        - Raised when the parametres given are in incorrect types
+
+    - InputFileError
+        - Raised when there is an I/O error when trying to read the input file
+
+    - OutputFileError
+        - Raised when there is an I/O error when trying to write the output file
+
+    - UnrecognisedHeaderError
+        - Raised when failing to parse a header
+
+    - AuthenticationError
+        - Raised when the provided authentication key is invalid
+    """
+
+    # Parse input file into Image
+    try:
+        image = Image.open(input_file)
+    except UnidentifiedImageError:
+        raise TypeError(
+            f"Image file must be a PIL.Image.Image (given {type(input_file)})")
+
+    # Attempt to extract and parse header
+    header = extract_header(image)
+    # Retrieve access to pixel data
+    pix = image.load()
+
+    # Retrieve metadata of image file
+    y_dim = image.size[1]
+
+    # Calculate length of data to be extracted (including the header)
+    data_length = Header.header_length + header.data_length
+
+    # Declare some local variables as the extraction starts
+    x, y, count = 0, 0, 0
+    result_data = b""
+    bit_loc = header.density
+
+    # Attempt to read data
+    while len(result_data) < data_length:
         byte = 0
         # Read every single bit
         # Iterate through every single bit of the byte
@@ -365,7 +441,7 @@ def extract_header(image: Image.Image) -> Header:
             if bit_loc == -1:
                 # Move to the next RGB and reset the bit index
                 count += 1
-                bit_loc = density
+                bit_loc = header.density
                 # If the entire pixel is read
                 if count == 3:
                     # Move to the next pixel in the row and reset the count
@@ -384,9 +460,75 @@ def extract_header(image: Image.Image) -> Header:
     # Strip header by slicing its known length
     result_data = result_data[Header.header_length:]
 
+    # Decrypt data
+    # Salt is already obtained (from the header) -> KDF
+    # -> Key -> Fernet -> Decrypted data
+    # 0. Extract salt from salt string
+    salt = extract_raw_salt(header.salt)
+    # 1. Create KDF
+    kdf = create_kdf(salt)
+    # 2. Derive key
+    # Authentication key will be encoded first to pass to KDF.
+    try:
+        key = kdf.derive(auth_key.encode())
+    except AttributeError:
+        raise TypeError(
+            f"Authentication key must be a string (given {type(auth_key)})")
+    # 3. Build Fernet
+    fn = build_fernet(key)
+    # 4. Attempt to decrypt data
+    # Wrapped to catch invalid key
+    try:
+        # 5. Store decrypted data
+        result_data = fn.decrypt(result_data)
+    except InvalidToken:
+        raise AuthenticationError("Invalid authentication key")
 
-    # Check if stdout is enabled then write to sys.stdout
-    if stdout:
+    # If compressed (as indicated by the header), decompress it
+    if header.compression > 0:
+        result_data = decompress(result_data)
+
+    # Write data to output file objects
+    # Iterate through all file objects
+    for file in output_file:
+        # Check if the file object is writable, or
+        # even a file at all
         try:
+            if not (file.writable() or file.closed):
+                raise OutputFileError(
+                    "Output file must be opened and writable")
+        except AttributeError:
+            raise TypeError(
+                f"Output file must be supported file object (given {type(file)})"
+            )
+        # If file object is text-based, i.e TextIOBase
+        if isinstance(file, TextIOBase):
+            # Attempt to decode binary data to string
+            try:
+                s = str(result_data, "utf-8")
+            except UnicodeDecodeError:
+                continue
+
+            # Attempt to write data
+            try:
+                file.write(s)
+            except IOError:
+                raise OutputFileError("Data cannot be writen")
+        # If file object is binary-based
+        elif isinstance(file, (BufferedIOBase, RawIOBase)):
+            # Attempt to write data
+            try:
+                file.write(result_data)
+            except IOError:
+                raise OutputFileError("Data cannot be writen")
+        # If file object is something-else file-like objects
+        else:
+            # Presume invalid
+            raise TypeError(
+                f"Output file must be supported file object (given {type(file)})"
+            )
+        # After writing, close the files, unless disabled by
+        # the caller
+        file.close()
 
     return True
