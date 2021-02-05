@@ -437,17 +437,15 @@ def write_steg(
         for i in range(8):
             # Thirdly, check if the bit is set
             # If bit is set
-            if byte & (1 << (7 - i)):
+            if is_bit_set(byte, i):
                 # Check if the bit at the current location in the image is set
                 # If unset then set it, otherwise unchange
-                if not current_pix[count] & (1 << bit_loc):
-                    current_pix[count] += 1 << bit_loc
+                current_pix[count] = set_bit(current_pix[count], bit_loc)
             # If bit is unset
             else:
                 # Check if the bit at the current location in the image is set
                 # If set then unset it, otherwise unchange
-                if current_pix[count] & (1 << bit_loc):
-                    current_pix[count] -= 1 << bit_loc
+                current_pix[count] = unset_bit(current_pix[count], bit_loc)
 
             # Move to the next bit
             # by decrementing index
@@ -475,8 +473,17 @@ def write_steg(
                     current_pix = list(pix[x, y])
 
     # Save as PNG
-    image.save(output_file)
-    return 0
+    image_file.save(output_file, "png")
+
+    # Check if close on exit flag is enabled
+    if close_on_exit:
+        # If enabled, close all file objects
+        input_file.close()
+        image_file.close()
+        output_file.close()
+    
+    # At this step, operation is successful, so return True
+    return True
 
 
 def extract_steg(steg_file: str,
