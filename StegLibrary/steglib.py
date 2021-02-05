@@ -1,6 +1,6 @@
-# This script implements the second version of steganography, which now includes
-# an option to increase data density (using the two least significant bits) and
-# an option to enable password verification.
+# This script implements the second version of steganography, which now
+# includes an option to increase data density (using the two least significant
+# bits) and an option to enable password verification.
 
 # Builtin modules
 from io import TextIOBase, RawIOBase, BufferedIOBase
@@ -82,7 +82,9 @@ def write_steg(
     - close_on_exit (bool) (default = cfg.flag_close_on_exit)
         - Whether to close the file objects on exit
 
-    - show_image_on_completion (bool) (default = cfg.flag_show_image_on_completion)
+    - show_image_on_completion (bool)
+    (default = cfg.flag_show_image_on_completion)
+        - Whether to show image on completion
 
     ### Return values
 
@@ -94,13 +96,16 @@ def write_steg(
         - Raised when the parametres given are in incorrect types
 
     - InputFileError
-        - Raised when there is an I/O error when trying to read the input file
+        - Raised when there is an I/O error when trying to read
+        the input file
 
     - OutputFileError
-        - Raised when there is an I/O error when trying to write the output file
+        - Raised when there is an I/O error when trying to write
+        the output file
 
     - InsufficientStorageError
-        - Raised when the input file contains more data than the maximum storage
+        - Raised when the input file contains more data than
+        the maximum storage
     """
 
     # Validate input file
@@ -129,7 +134,8 @@ def write_steg(
     # 1. Type checking
     if not isinstance(compression, int):
         raise TypeError(
-            f"Compression must be an integer (given {type(compression)} instead)"
+            "Compression must be an integer" +
+            f"(given {type(compression)} instead)"
         )
     # 2. Check if compression level is valid by compare with configuration
     if compression not in cfg.available_compression:
@@ -143,7 +149,8 @@ def write_steg(
     # 1. Type checking
     if not isinstance(auth_key, str):
         raise TypeError(
-            f"Authentication key must be a string (given {type(auth_key)} instead)"
+            "Authentication key must be a string" +
+            f"(given {type(auth_key)} instead)"
         )
     # 2. Make salt
     salt, salt_str = make_salt()
@@ -391,10 +398,12 @@ def extract_steg(
         - Raised when the parametres given are in incorrect types
 
     - InputFileError
-        - Raised when there is an I/O error when trying to read the input file
+        - Raised when there is an I/O error when trying to read
+        the input file
 
     - OutputFileError
-        - Raised when there is an I/O error when trying to write the output file
+        - Raised when there is an I/O error when trying to write
+        the output file
 
     - UnrecognisedHeaderError
         - Raised when failing to parse a header
@@ -499,7 +508,8 @@ def extract_steg(
                     "Output file must be opened and writable")
         except AttributeError:
             raise TypeError(
-                f"Output file must be supported file object (given {type(file)})"
+                "Output file must be supported file object" +
+                f"(given {type(file)})"
             )
         # If file object is text-based, i.e TextIOBase
         if isinstance(file, TextIOBase):
@@ -525,7 +535,8 @@ def extract_steg(
         else:
             # Presume invalid
             raise TypeError(
-                f"Output file must be supported file object (given {type(file)})"
+                "Output file must be supported file object" +
+                f"(given {type(file)})"
             )
         # After writing, close the files, unless disabled by
         # the caller

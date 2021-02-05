@@ -30,7 +30,8 @@ class Header:
     # Regex pattern of the header
     # data_length?flag?salt
     pattern = r"(\d{1,8})\?(\d{1,3})\?"
-    hash_pattern = r"((?:[A-Za-z0-9+/]{4})+(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?){24}"
+    hash_pattern = r"((?:[A-Za-z0-9+/]{4})+(?:[A-Za-z0-9+/]{2}==" + \
+        r"|[A-Za-z0-9+/]{3}=)?){24}"
     pattern = compile(f"^{pattern + hash_pattern}$")
 
     def __str__(self) -> str:
@@ -61,10 +62,11 @@ class Header:
 
     def generate(self) -> None:
         """
-        Generates a header created from data given during Header initialisation.
+        Generates a header created from data given during
+        Header initialisation.
 
-        There is no need to call this method, unless any metadata has been modified
-        after initialisation.
+        There is no need to call this method, unless any metadata has been
+        modified after initialisation.
         """
         # Create a flag from compression level and density level.
         # Bit 6 - 2: Compression level (0 (no compression) - 9)

@@ -94,7 +94,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         try:
             header = steg.extract_steg(self.input_file, "", "", False, True)
             self.write_output(
-                "[System] File selected is a valid steganograph. Creation disabled!"
+                "[System] File selected is a valid steganograph." +
+                "Creation disabled!"
             )
             # Set text on label
             self.label_input_status.setText("Valid steganograph")
