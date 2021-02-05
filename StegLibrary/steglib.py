@@ -248,6 +248,16 @@ def write_steg(
                     # Request new pixel to be written
                     current_pix = list(pix[x, y])
 
+    # Validate output file
+    # 1. Type guard
+    try:
+        # 2. Check that the file can be written.
+        if not input_file.readable():
+            raise InputFileError("Output file is not writable!")
+    except AttributeError:
+        raise InputFileError(
+            "Output file must be a writable file-like object!")
+
     # Save as PNG
     image_file.save(output_file, "png")
 
