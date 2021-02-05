@@ -82,6 +82,8 @@ def write_steg(
     - close_on_exit (bool) (default = cfg.flag_close_on_exit)
         - Whether to close the file objects on exit
 
+    - show_image_on_completion (bool) (default = cfg.flag_show_image_on_completion)
+
     ### Return values
 
     True if the operation is successful, otherwise False
