@@ -3,10 +3,9 @@
 # an option to enable password verification.
 
 # Builtin modules
-import io
-import bz2
-import base64
-from typing import Union
+from io import TextIOBase, RawIOBase, BufferedIOBase
+from bz2 import compress, decompress
+from typing import List, Union
 
 # Internal modules
 from StegLibrary import SteganographyConfig as cfg
@@ -46,9 +45,9 @@ except ImportError:
 
 
 def write_steg(
-    input_file: Union[io.RawIOBase, io.BufferedIOBase],
+    input_file: Union[RawIOBase, BufferedIOBase],
     image_file: Image.Image,
-    output_file: Union[io.RawIOBase, io.BufferedIOBase],
+    output_file: Union[RawIOBase, BufferedIOBase],
     *,
     auth_key: str = cfg.default_auth_key,
     compression: int = cfg.default_compression,
@@ -60,13 +59,13 @@ def write_steg(
 
     ### Positional arguments
 
-    - input_file (io.RawIOBase | io.BufferedIOBase)
+    - input_file (RawIOBase | BufferedIOBase)
         - A readable file-like object of the input file
 
     - image_file (PIL.Image.Image)
         - An opened image object
 
-    - output_file (io.RawIOBase | io.BufferedIOBase)
+    - output_file (RawIOBase | BufferedIOBase)
         - A writable file-like object of the output file
 
     ### Keyword arguments
@@ -136,7 +135,7 @@ def write_steg(
     # 3. Start compression, unless disabled by the caller
     if compression > 0:
         # Compress using the builtin bzip2 library
-        data = bz2.compress(data, compresslevel=compression)
+        data = compress(data, compresslevel=compression)
 
     # Encrypt data
     # 1. Type checking
