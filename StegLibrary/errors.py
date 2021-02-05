@@ -1,5 +1,6 @@
 # This file defines all errors raised by this application/library
 
+
 class SteganographyError(BaseException):
     """
     This class inherits from the base BaseException class and all
@@ -13,6 +14,7 @@ class InputFileError(SteganographyError):
 
     Raised when there is an I/O error when trying to read the input file.
     """
+
 
 class InsufficientStorageError(SteganographyError):
     """
