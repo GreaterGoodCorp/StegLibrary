@@ -4,7 +4,7 @@ from os import path, getcwd
 
 # Internal modules
 from StegLibrary import write_steg, extract_steg
-from StegLibrary.header import Header
+from StegLibrary.core.header import Header
 from StegLibrary.helper import err_imp
 from StegLibrary.gui import execute_gui
 
