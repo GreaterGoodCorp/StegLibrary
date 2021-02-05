@@ -1,11 +1,21 @@
+# Builtin modules
 from base64 import b64encode, b64decode
 from binascii import Error
+from os import urandom
+from typing import Tuple
+
+# Internal modules
+from StegLibrary.helper import err_imp
+
+# Non-builtin modules
+try:
 from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from os import urandom
-from typing import Tuple
+except ImportError:
+    err_imp("cryptography")
+    exit(1)
 
 
 def make_salt() -> Tuple[bytes, str]:
