@@ -1,4 +1,8 @@
 import re
+# Mandatory functions
+def err_imp(pkg_name):
+    s = f"[Package] This package is not installed: {pkg_name}"
+    return ANSIFormatter.extendedPrint(s, ansi=ANSIFormatter.Red)
 
 
 try:
