@@ -16,12 +16,12 @@ from StegLibrary.crypto import (
     InvalidToken
 )
 from StegLibrary.crypto.salt import extract_raw_salt
-from StegLibrary.header import (
+from StegLibrary.core.header import (
     Header,
     build_header,
     parse_header
 )
-from StegLibrary.errors import (
+from StegLibrary.core.errors import (
     InputFileError,
     InsufficientStorageError,
     UnrecognisedHeaderError,
