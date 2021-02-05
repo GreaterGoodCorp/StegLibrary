@@ -113,3 +113,34 @@ class ANSIFormatter:
 def err_imp(pkg_name):
     s = f"[Package] This package is not installed: {pkg_name}"
     return ANSIFormatter.extendedPrint(s, ansi=ANSIFormatter.Red)
+
+def is_bit_set(i: int, pos: int) -> bool:
+    """Checks if bit is set
+    
+    ### Positional arguments
+    - i (int)
+        - An integer to check
+    - pos (int)
+       - Position of the bit to check (indexed from the last significant bit)
+        
+    ### Returns
+    True if bit is set, otherwise False
+    
+    ### Raises
+    
+    - TypeError
+        - Raised when the parametres are of incorrect type
+    """
+    # Type checking
+    if not (isinstance(i, int) and isinstance(pos, int)):
+        raise TypeError(f"Must be an integer (given {type(i)} instead)")
+        
+    # Check bit by performing bitwise operations AND
+    # Explanation:
+    # Given an integer i = 10101010, to check if the fourth to last bit (pos = 3)
+    # is set, AND it with number n = 00001000 = 2 ** pos. Since n contains bit 0
+    # everywhere except at the pos, the result of AND will be 0000x000, with x is
+    # equal to 1 if the pos-th bit of i is set, 0 otherwise. If x is 1, the result
+    # will be a non-zero number, 0 otherwise. Hence, the bit is set if the result is
+    # non-zero, unset otherwise
+    return i & (1 << pos)
