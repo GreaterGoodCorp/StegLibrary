@@ -13,3 +13,10 @@ class InputFileError(SteganographyError):
 
     Raised when there is an I/O error when trying to read the input file.
     """
+
+class InsufficientStorageError(SteganographyError):
+    """
+    This class inherits from the base SteganographyError class.
+
+    Raised when there is insufficient storage to store all the data.
+    """
