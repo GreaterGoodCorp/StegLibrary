@@ -10,7 +10,7 @@ from os import path
 from typing import Union
 
 # Internal modules
-from StegLibrary.config import SteganographyConfig as Config
+from StegLibrary import cfg
 from StegLibrary.crypto import make_salt, create_kdf, build_fernet
 from StegLibrary.header import build_header
 from StegLibrary.errors import *
@@ -29,11 +29,11 @@ def write_steg(
     image_file: Image.Image,
     output_file: Union[io.RawIOBase, io.BufferedIOBase],
     *,
-    auth_key: str = Config.default_auth_key,
-    compression: int = Config.default_compression,
-    density: int = Config.default_density,
-    close_on_exit: bool = Config.flag_close_on_exit,
-    show_image_on_completion: bool = Config.flag_show_image_on_completion,
+    auth_key: str = cfg.default_auth_key,
+    compression: int = cfg.default_compression,
+    density: int = cfg.default_density,
+    close_on_exit: bool = cfg.flag_close_on_exit,
+    show_image_on_completion: bool = cfg.flag_show_image_on_completion,
 ) -> bool:
     """Performs steaganography on input file and write data to image file.
 
@@ -50,16 +50,16 @@ def write_steg(
 
     ### Keyword arguments
 
-    - auth_key (str) (default = Config.default_auth_key)
+    - auth_key (str) (default = cfg.default_auth_key)
         - The authentication key
     
-    - compression (int) (default = Config.default_compression)
+    - compression (int) (default = cfg.default_compression)
         - The compression level
 
-    - density (int) (default = Config.default_density)
+    - density (int) (default = cfg.default_density)
         - The data density
 
-    - close_on_exit (bool) (default = Config.flag_close_on_exit)
+    - close_on_exit (bool) (default = cfg.flag_close_on_exit)
         - Whether to close the file objects on exit
 
     ### Return values
@@ -110,7 +110,7 @@ def write_steg(
             f"Compression must be an integer (given {type(compression)} instead)"
         )
     # 2. Check if compression level is valid by compare with configuration
-    if compression not in Config.available_compression:
+    if compression not in cfg.available_compression:
         raise ValueError("Compression level not defined!")
     # 3. Start compression, unless disabled by the caller
     if compression > 0:
