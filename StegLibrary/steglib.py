@@ -6,7 +6,6 @@
 import io
 import bz2
 import base64
-import imghdr
 from os import path
 from typing import Union
 
