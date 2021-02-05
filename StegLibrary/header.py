@@ -1,8 +1,11 @@
 # This script defines the Header class, whose functionality is to
 # create and maintain the header of each steganograph.
 
+# Builtin modules
 import re
 import hashlib
+
+# Internal modules
 from StegLibrary import cfg
 
 
