@@ -1,4 +1,6 @@
 import re
+
+
 # Mandatory functions
 def err_imp(pkg_name):
     s = f"[Package] This package is not installed: {pkg_name}"
@@ -146,6 +148,7 @@ def err_imp(pkg_name):
     s = f"[Package] This package is not installed: {pkg_name}"
     return ANSIFormatter.extendedPrint(s, ansi=ANSIFormatter.Red)
 
+
 def is_bit_set(i: int, pos: int) -> bool:
     """Checks if bit is set
     
@@ -166,7 +169,7 @@ def is_bit_set(i: int, pos: int) -> bool:
     # Type checking
     if not (isinstance(i, int) and isinstance(pos, int)):
         raise TypeError(f"Must be an integer (given {type(i)} instead)")
-        
+
     # Check bit by performing bitwise operations AND
     # Explanation:
     # Given an integer i = 10101010, to check if the fourth to last bit (pos = 3)
@@ -176,6 +179,7 @@ def is_bit_set(i: int, pos: int) -> bool:
     # will be a non-zero number, 0 otherwise. Hence, the bit is set if the result is
     # non-zero, unset otherwise
     return i & (1 << pos)
+
 
 def set_bit(i: int, pos: int) -> int:
     """Sets a bit of an integer at the given index.
@@ -209,6 +213,7 @@ def set_bit(i: int, pos: int) -> int:
         # order to set bit at pos = 5, add n = 00100000 to i. After
         # this, the bit will be set (i = 10111001).
         return i + (1 << pos)
+
 
 def unset_bit(i: int, pos: int) -> int:
     """Unsets a bit of an integer at the given index.
