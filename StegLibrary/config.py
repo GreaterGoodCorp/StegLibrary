@@ -7,3 +7,4 @@ class SteganographyConfig(object):
     default_auth_key = "bGs21Gt@31"
 
     flag_close_on_exit = True
+    flag_show_image_on_completion = False
