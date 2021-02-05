@@ -8,9 +8,10 @@ from .kdf import *
 from .fernet import *
 
 # Export user-defined objects
-__all__= [
-    make_salt,
-    extract_raw_salt,
-    create_kdf,
-    build_fernet,
+__all__ = [
+    "make_salt",
+    "extract_raw_salt",
+    "create_kdf",
+    "build_fernet",
+    "InvalidToken"
 ]
