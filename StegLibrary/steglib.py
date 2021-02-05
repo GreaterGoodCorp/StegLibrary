@@ -2,20 +2,21 @@
 # an option to increase data density (using the two least significant bits) and
 # an option to enable password verification.
 
-# Builtins
+# Builtin modules
 import io
 import bz2
 import base64
 from os import path
 from typing import Union
 
+# Internal modules
 from StegLibrary.config import SteganographyConfig as Config
 from StegLibrary.crypto import make_salt, create_kdf, build_fernet
 from StegLibrary.header import build_header
 from StegLibrary.errors import *
 from StegLibrary.helper import err_imp, is_bit_set, set_bit, show_image, unset_bit
 
-# Extra
+# Non-builtin modules
 try:
     from PIL import Image, UnidentifiedImageError
 except ImportError:
