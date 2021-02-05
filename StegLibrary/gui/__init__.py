@@ -1,12 +1,9 @@
-# Impoprt GUI frame
-from .gui import *
+# Import expose API functions
+from .gui_api import execute_gui
 
-# Import GUI action implementation
-from .gui_action import *
-
-# Import GUI API
-from .gui_api import *
-
+# Define import * functionality
+# Import all only imports main API
+# All other classes, objects must be imported by name
 __all__ = [
-    execute_gui,
+    "execute_gui",
 ]
