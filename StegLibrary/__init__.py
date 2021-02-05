@@ -1,9 +1,6 @@
 # Import class SteganographyConfig
 from .config import SteganographyConfig
 
-# Import configuration object
-cfg = SteganographyConfig
-
 # Import helper functions
 from .helper import *
 
