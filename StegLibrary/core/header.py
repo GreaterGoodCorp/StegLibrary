@@ -6,7 +6,7 @@ from re import compile
 
 # Internal modules
 from StegLibrary import SteganographyConfig as Config
-from StegLibrary.errors import UnrecognisedHeaderError
+from StegLibrary.core.errors import UnrecognisedHeaderError
 
 
 class Header:
