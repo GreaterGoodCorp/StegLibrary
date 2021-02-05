@@ -276,50 +276,14 @@ def write_steg(
     return True
 
 
-def extract_steg(steg_file: str,
-                 output_file: str,
-                 key: str,
-                 stdout: bool = False,
-                 header_only: bool = False) -> bool:
-    """
-    Extracts data from steganograph.
 
-    * Positional arguments:
 
-    steg_file -- Path to steganograph
 
-    output_file -- Path to output file
 
-    key -- Authentication key
 
-    stdout -- Send output to sys.stdout
 
-    * Returns:
-
-    True if the steganograph is extracted and written to disk successfully
-
-    * Raises:
-
-    TypeError: Raised when the parametres are of incorrect types
-
-    HeaderError: Raised when the header of the stegnograph is invalid
 
     """
-
-    # Validate the steganograph
-    validate_image_file(steg_file)
-
-    # Check availability of output file
-    # No output for validation, so just add a guard
-    if not (header_only or check_file_availability(output_file)):
-        # If file is already taken, raise error
-        raise UnavailableFileError()
-
-    # Retrieve image data
-    image = retrieve_image(steg_file)
-
-    # Load the steganograph and its metadata
-    image = Image.open(steg_file)
     pix = image.load()
     y_dim = image.size[1]
 
@@ -366,36 +330,11 @@ def extract_steg(steg_file: str,
         # e.g wrong density
         try:
             # Invalid header has undecodable byte
-            str(result_data, "utf-8")
-        except:
             # Hence, switch to the next possible density
             # Reset all values to original
             density += 1
             result_data = b""
             x, y, count = 0, 0, 0
-        # If header is valid then stop
-        else:
-            break
-
-    # If density is unavailable
-    # i.e Not a valid header -> Invalid steganograph
-    if density not in Header.available_density:
-        # Raise error that the steganograph is invalid
-        raise HeaderError("InvalidFormat")
-
-    # Retrieve data from header
-    # Note, HeaderError will be raised if parsing is not done
-    header_metadata = Header.parse(str(result_data, "utf-8"), key, header_only)
-
-    # Return on completion of validation
-    if header_only:
-        return header_metadata
-
-    # Attempt to read the remaining data
-    # Continue with the result variable already containing the header
-    # which will be stripped later
-    while len(result_data
-              ) < header_metadata["data_length"] + Header.header_length:
         byte = 0
         # Read every single bit
         # Iterate through every single bit of the byte
@@ -428,34 +367,9 @@ def extract_steg(steg_file: str,
     # Strip header by slicing its known length
     result_data = result_data[Header.header_length:]
 
-    # If compressed (as indicated by the header), decompress it
-    if header_metadata["compression"] > 0:
-        # NOTE: This is a temporary fix as mentioned in the issue
-        # The last few bits are read improbably, hence the
-        # base64 padding is wrong
-        # This part removes the invalid padding and append
-        # a valid one.
-
-        # Find the index of padding
-        padding_index = result_data.find(b"=", -2)
-
-        # Remove the padding by slicing and add the new padding
-        result_data = result_data[:padding_index] + b"=="
-
-        # Base64-decode the data and decompress
-        result_data = bz2.decompress(base64.b64decode(result_data))
 
     # Check if stdout is enabled then write to sys.stdout
     if stdout:
         try:
-            # Try to print string
-            print(str(result_data, "utf-8"))
-        except:
-            # However if not supported (e.g binary data)
-            # then print raw binary data
-            print(result_data)
-
-    # Write data to output file
-    write_output_data(result_data, output_file)
 
     return True
