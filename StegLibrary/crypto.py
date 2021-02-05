@@ -9,10 +9,10 @@ from StegLibrary.helper import err_imp
 
 # Non-builtin modules
 try:
-from cryptography.fernet import Fernet
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+    from cryptography.fernet import Fernet
+    from cryptography.hazmat.backends import default_backend
+    from cryptography.hazmat.primitives import hashes
+    from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 except ImportError:
     err_imp("cryptography")
     exit(1)
@@ -90,6 +90,7 @@ def build_fernet(key: bytes) -> Fernet:
 
     # Initialise and return a Fernet object
     return Fernet(key)
+
 
 def extract_raw_salt(salt_str: str) -> bytes:
     """Extract raw salt from the given salt string.
