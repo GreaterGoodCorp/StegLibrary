@@ -39,7 +39,7 @@ from StegLibrary.helper import (
 
 # Non-builtin modules
 try:
-    from PIL import Image
+    from PIL import Image, UnidentifiedImageError
 except ImportError:
     err_imp("Pillow")
     exit(1)
