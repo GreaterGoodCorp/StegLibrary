@@ -403,29 +403,27 @@ def write_steg(
     except AttributeError:
         raise TypeError(
             f"Image file must be a PIL.Image.Image (given {type(image_file)})")
-
-    # Read and retrieve image data
-    image = retrieve_image(image_file)
-    pix = image.load()
+        
+    # Retrieve metadata of image file
     x_dim, y_dim = image.size
 
     # Check if the image has enough room to store data
-    # First find the number of writable pixels
+    # 1. Find the number of writable pixels
     no_of_pixel = x_dim * y_dim
-    # Then, the number of colour codes by multyplying by 3
+    # 2. Find the number of colour codes by multyplying by 3
     # since each pixel contains 3 integers
     no_of_rgb = no_of_pixel * 3
-    # Next, depending on the density, find the maximum number
+    # 3. Depending on the density, find the maximum number
     # of bits can be stored
     no_of_storable_bit = no_of_rgb * density
-    # Finally, find the number of bits to be stored by
+    # 4. Find the number of bits to be stored by
     # multiplying by 8 (1 byte contains 8 bit)
     no_of_stored_bit = len(data) * 8
 
     # Make sure there are enough space to store all bits
     if no_of_storable_bit < no_of_stored_bit:
         # If there are not enough, raise error
-        raise InsufficientStorageError()
+        raise InsufficientStorageError("Data is too big to be stored!")
 
     # Start writing steganograph
     # Declare usable variables as pointer to bit being written
