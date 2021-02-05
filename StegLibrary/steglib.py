@@ -276,15 +276,30 @@ def write_steg(
     return True
 
 
+def extract_header(image: Image.Image) -> Header:
+    """Extracts header from valid steganography file.
 
+    ### Positional arguements
 
+    - image (PIL.Image.Image)
+        - The image to extract header
 
+    ### Returns
 
+    A Header object of the extracted header
 
+    ### Raises
 
+    - UnrecognisedHeaderError
+        - Raised when failing to parse a header
 
+    - TypeError
+        - Raised when the parametres given are in incorrect types
     """
+    # Retrieve access to pixel data
     pix = image.load()
+
+    # Retrieve metadata of image file
     y_dim = image.size[1]
 
     # Declare some local variables as the extraction starts
@@ -330,6 +345,8 @@ def write_steg(
         # e.g wrong density
         try:
             # Invalid header has undecodable byte
+            return parse_header(result_data)
+        except UnrecognisedHeaderError:
             # Hence, switch to the next possible density
             # Reset all values to original
             density += 1
