@@ -41,7 +41,7 @@ def create(image: str, key: str, compress: int, pack: int, output: str, data: st
         # Get the absolute path for the user-specified data file
         data = path.join(getcwd(), *path.split(data))
 
-    if output == None:
+    if output is None:
         # Get the absolute path for the default output file
         # Default is the name of data file, change extension to .png
         name_no_ext = path.splitext(data)[0]
@@ -63,7 +63,7 @@ def extract(key: str, output: str, stdout: bool, steganograph: str):
         # Get the absolute path for the steganograph
         steganograph = path.join(getcwd(), *path.split(steganograph))
 
-    if output == None:
+    if output is None:
         # Get the absolute path of the default output file
         # Default is the name of the steganograph, extension-stripped
         output = path.splitext(steganograph)[0]

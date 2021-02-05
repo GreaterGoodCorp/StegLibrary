@@ -94,7 +94,7 @@ class ANSIFormatter:
     def extendedPrint(obj, *args, **kwargs):
         """Extend the original print() to help print colour easier"""
         ansi_option = kwargs.pop("ansi", None)
-        if ansi_option == None:
+        if ansi_option is None:
             return print(obj, *args, **kwargs)
         else:
             obj_str = str(obj)
@@ -103,7 +103,7 @@ class ANSIFormatter:
                     obj_str = ansi_option + obj_str
                 else:
                     _option = getattr(ANSIFormatter, ansi_option, None)
-                    if _option == None:
+                    if _option is None:
                         raise ValueError(
                             f"Invalid ANSI code or colour name: {ansi_option}")
                     obj_str = _option + obj_str
@@ -114,7 +114,7 @@ class ANSIFormatter:
                             obj_str = option + obj_str
                         else:
                             _option = getattr(ANSIFormatter, option, None)
-                            if _option == None:
+                            if _option is None:
                                 raise ValueError(
                                     f"Invalid ANSI code or colour name: {option}"
                                 )
