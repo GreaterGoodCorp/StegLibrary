@@ -19,6 +19,9 @@ except ImportError:
 
 try:
 from PyQt5 import QtWidgets
+except ImportError:
+    err_imp("PyQt5")
+    exit(1)
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
