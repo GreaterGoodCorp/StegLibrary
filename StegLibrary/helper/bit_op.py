@@ -1,3 +1,8 @@
+# Builtin modules
+from typing import Optional
+from itertools import count
+
+
 def is_bit_set(i: int, pos: int) -> bool:
     """Checks if bit is set
 
