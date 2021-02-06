@@ -153,18 +153,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def select_image(self):
         # Ask user to choose a file
-        self.image_file = QtWidgets.QFileDialog.getOpenFileName()[0]
+        self.image_filename = QtWidgets.QFileDialog.getOpenFileName()[0]
 
         # If the user does not select any file
         # exit the routine
-        if self.image_file is None or len(self.image_file) == 0:
+        if self.image_filename is None or len(self.image_filename) == 0:
             return
 
         # Display text output
-        self.write_output("[User] Image selected at: " + self.image_file)
+        self.write_output("[User] Image selected at: " + self.image_filename)
 
         # Show the path to file
-        self.field_image.setText(self.image_file)
+        self.field_image.setText(self.image_filename)
 
         # Validate image
         try:
