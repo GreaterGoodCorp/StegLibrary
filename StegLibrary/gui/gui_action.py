@@ -62,7 +62,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # Add function for Help button
         self.action_help.triggered.connect(
-            lambda: webbrowser.open("https://github.com/MunchDev/StegLibrary"))
+            lambda: webopen("https://github.com/MunchDev/StegLibrary"))
 
         # Add function for Select (Input) button
         self.button_input.clicked.connect(self.select_input)
