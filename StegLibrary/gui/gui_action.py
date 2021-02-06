@@ -203,11 +203,21 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.write_output(
             "[System] Default output filename is: " + self.output_filename)
 
-        self.write_output("[System] Default output filename is: " +
-                          self.output_file)
+        # Check if file exists, then overwrite
+        if path.isfile(self.output_filename):
+            self.write_output("[System] File already exists. Will be overwritten.")
 
         # Show the path to file
-        self.field_output.setText(self.output_file)
+        self.field_output.setText(self.output_filename)
+
+        # Attempt to make file object
+        try:
+            self.output_fileobject = raw_open(self.output_filename)
+        except IOError:
+            self.write_output(
+                "[System] Unable to open file: " + self.input_filename)
+            self.disable_parametres()
+            return
 
         self.label_output_status.setText("Valid file")
         self.label_output_status.setStyleSheet("QLabel { color: green; }")
