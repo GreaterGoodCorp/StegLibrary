@@ -166,19 +166,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # Show the path to file
         self.field_image.setText(self.image_filename)
 
-        # Validate image
+        # Attempt to load image into memory
         try:
-            steg.validate_image_file(self.image_file)
-        except ImageFileValidationError as e:
+            self.image_fileobject = raw_open(self.image_filename)
+            # Attempt to parse as an image
+            Image.open(self.image_fileobject).close()
+        except IOError:
+            self.write_output(
+                "[System] Unable to open file: " + self.input_filename)
+            self.disable_parametres()
+            return
+        except UnidentifiedImageError:
             self.label_image_status.setText("Invalid image")
             self.label_image_status.setStyleSheet("QLabel { color: red; }")
-            self.write_output("[System] " + str(e))
+            self.write_output("[System] Selected image file is unidentified")
             self.disable_parametres()
+            return
         else:
             self.label_image_status.setText("Valid image")
             self.label_image_status.setStyleSheet("QLabel { color: green; }")
             self.write_output("[System] The image file is valid!")
-
             self.has_image = True
             self.enable_parametres()
 
