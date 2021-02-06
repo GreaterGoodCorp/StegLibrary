@@ -138,7 +138,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         except UnidentifiedImageError or UnrecognisedHeaderError:
             # If it is a normal file
             self.write_output(
-                "[System] File selected is not a steganograph. Extraction disabled!"
+                "[System] File selected is not a steganograph. " +
+                "Extraction disabled!"
             )
             # Set text on label
             self.label_input_status.setText("Valid file")
@@ -215,7 +216,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # Check if file exists, then overwrite
         if path.isfile(self.output_filename):
-            self.write_output("[System] File already exists. Will be overwritten.")
+            self.write_output(
+                "[System] File already exists. Will be overwritten.")
 
         # Show the path to file
         self.field_output.setText(self.output_filename)
@@ -272,32 +274,29 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.write_output("Operation will be cancelled.")
             return
 
-        if self.check_stdout.isChecked():
-            with open(self.output_file, "r") as f:
-                self.write_output(f.read())
-
-        self.reset()
-
     def print_system_status(self):
-        self.write_output(f"[System] Status report:")
-        self.write_output(f"[System] Input file: {self.input_file}")
+        self.write_output("[System] Status report:")
+        self.write_output(f"[System] Input file: {self.input_filename}")
         self.write_output(f"[System] File is staganograph? {self.has_steg}")
         if not self.has_steg:
-            self.write_output(f"[System] Image file: {self.image_file}")
-        self.write_output(f"[System] Output file: {self.output_file}")
+            self.write_output(f"[System] Image file: {self.image_filename}")
+        self.write_output(f"[System] Output file: {self.output_filename}")
         if len(self.field_authkey.text()) == 0:
             self.write_output(
-                f"[System] No authentication key given. Default key '{Header.default_key}' used instead."
+                "[System] No authentication key given. " +
+                "Default key used instead."
             )
         else:
-            self.write_output(f"[System] Authentication key is as given.")
+            self.write_output("[System] Authentication key is as given.")
         if self.has_steg:
             self.write_output(
-                f"[System] Redirect output to stdout? {self.check_stdout.isChecked()}"
+                "[System] Redirect output to stdout? " +
+                f"{self.check_stdout.isChecked()}"
             )
         else:
             self.write_output(
-                f"[System] Show image on creation? {self.check_showim.isChecked()}"
+                "[System] Show image on creation? " +
+                f"{self.check_showim.isChecked()}"
             )
 
     def enable_parametres(self):
@@ -314,10 +313,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.button_extract.setEnabled(1)
 
             self.write_output(
-                "[System] Please enter the authentication key used during creation."
+                "[System] Please enter the authentication key " +
+                "used during creation."
             )
             self.write_output(
-                "[System] Please check the appropriate options and click 'Extract' to start."
+                "[System] Please check the appropriate options " +
+                "and click 'Extract' to start."
             )
         else:
             self.field_authkey.setEnabled(1)
@@ -329,13 +330,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.write_output(
                 "[System] Please enter the authentication key for creation.")
             self.write_output(
-                "[System] The key is required to extract data from the steganograph later."
+                "[System] The key is required to extract data from the " +
+                "steganograph later."
             )
             self.write_output(
-                "[System] Please choose a compression level and density for creation."
+                "[System] Please choose a compression level and density " +
+                "for creation."
             )
             self.write_output(
-                "[System] Please check the appropriate options and click 'Create' to start."
+                "[System] Please check the appropriate options and click " +
+                "'Create' to start."
             )
 
     def disable_parametres(self):
