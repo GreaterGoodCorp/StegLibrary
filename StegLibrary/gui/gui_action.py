@@ -1,11 +1,23 @@
-from StegLibrary.header import Header
+# Builtin modules
 from os import path
+from webbrowser import open as webopen
 
-from StegLibrary.errors import SteganographyError
+# Internal modules
+from StegLibrary import write_steg, extract_steg
+from StegLibrary.helper import err_imp, raw_open
+from StegLibrary.core.header import Header
+from StegLibrary.core.errors import UnrecognisedHeaderError
+from StegLibrary.core.steg import extract_header
 from StegLibrary.gui import Ui_MainWindow
-import StegLibrary.steglib as steg
-import webbrowser
-from PIL import Image
+
+# Non-builtin modules
+try:
+    from PIL import Image, UnidentifiedImageError
+except ImportError:
+    err_imp("Pillow")
+    exit(1)
+
+try:
 from PyQt5 import QtWidgets
 
 
