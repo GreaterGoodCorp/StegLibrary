@@ -34,9 +34,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.has_image = False
         self.has_output = False
 
-        self.input_file = ""
-        self.output_file = ""
-        self.image_file = ""
+        self.input_filename = ""
+        self.output_filename = ""
+        self.image_filename = ""
 
         self.field_input.setText("")
         self.label_input_status.setText("Select input file")
