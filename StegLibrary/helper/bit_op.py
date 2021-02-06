@@ -155,3 +155,37 @@ def bitstr_from_int(
 
     return result_str
 
+
+def int_from_bit_str(s: str) -> int:
+    """Convert binary representation to integer
+
+    ### Positional arguments
+
+    - s (str)
+        - A binary representation string
+
+    ### Returns
+
+    An integer of the binary pattern
+
+    ### Raises
+
+    - TypeError
+        - Raised when the parametres are of incorrect type
+
+    - ValueError
+        - Raised when the string contains character other than "1" and "0"
+    """
+    # Type checking
+    if not isinstance(s, str):
+        raise TypeError(f"Must be a string (given {type(s)})")
+
+    # Consume bit-by-bit of the string
+    # Then add to result 1 << bit (2 ** bit)
+    result = 0
+    for loc in range(len(s)):
+        if s[loc] not in ("0", "1"):
+            raise ValueError(f"String contains invalid character: '{s[loc]}")
+        result += int(s[loc]) << loc
+
+    return result
