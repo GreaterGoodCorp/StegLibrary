@@ -5,7 +5,7 @@
 from re import compile
 
 # Internal modules
-from StegLibrary import SteganographyConfig as Config
+from StegLibrary.core import SteganographyConfig as Config
 from StegLibrary.core.errors import UnrecognisedHeaderError
 
 

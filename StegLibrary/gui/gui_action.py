@@ -4,10 +4,9 @@ from sys import stdout
 from webbrowser import open as webopen
 
 # Internal modules
-from StegLibrary import write_steg, extract_steg
 from StegLibrary.helper import err_imp, raw_open
 from StegLibrary.core.errors import UnrecognisedHeaderError, SteganographyError
-from StegLibrary.core.steg import extract_header
+from StegLibrary.core.steg import extract_header, write_steg, extract_steg
 from StegLibrary.gui import Ui_MainWindow
 
 # Non-builtin modules

@@ -3,8 +3,7 @@ from .config import SteganographyConfig
 from .header import (
     build_header,
     validate_header,
-    parse_header
-
+    parse_header,
 )
 from .steg import write_steg, extract_steg
 

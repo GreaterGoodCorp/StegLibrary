@@ -8,25 +8,18 @@ from bz2 import compress, decompress
 from typing import List, Union
 
 # Internal modules
-from StegLibrary import SteganographyConfig as cfg
-from StegLibrary.crypto import (
-    make_salt,
-    create_kdf,
-    build_fernet,
-    InvalidToken
-)
-from StegLibrary.crypto.salt import extract_raw_salt
-from StegLibrary.core.header import (
-    Header,
-    build_header,
-    parse_header
-)
+from StegLibrary.core import SteganographyConfig as cfg
 from StegLibrary.core.errors import (
     InputFileError,
     InsufficientStorageError,
     UnrecognisedHeaderError,
     AuthenticationError,
     OutputFileError,
+)
+from StegLibrary.core.header import (
+    Header,
+    build_header,
+    parse_header
 )
 from StegLibrary.helper import (
     err_imp,
@@ -35,6 +28,14 @@ from StegLibrary.helper import (
     show_image,
     unset_bit
 )
+from StegLibrary.crypto import (
+    make_salt,
+    extract_raw_salt,
+    create_kdf,
+    build_fernet,
+    InvalidToken
+)
+
 
 # Non-builtin modules
 try:

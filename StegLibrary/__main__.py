@@ -1,11 +1,10 @@
-
 # Builtin modules
 from os import path, getcwd
 
 # Internal modules
-from StegLibrary import write_steg, extract_steg
-from StegLibrary.core.header import Header
 from StegLibrary.helper import err_imp
+from StegLibrary.core import SteganographyConfig as Config
+from StegLibrary.core.steg import write_steg, extract_steg
 from StegLibrary.gui import execute_gui
 
 # Non-builtin modules
@@ -37,7 +36,7 @@ def steg():
     "--key",
     help="The authentication key",
     type=str,
-    default=Header.default_key
+    default=Config.default_auth_key
 )
 @click.option(
     "-c",
@@ -68,7 +67,7 @@ def create(
     output: str,
     data: str
 ):
-    if pack not in Header.available_density:
+    if pack not in Config.available_density:
         raise click.exceptions.BadOptionUsage(
             "pack", "Density must be from 1 to 3!")
 
@@ -101,7 +100,7 @@ def create(
     "--key",
     help="The authentication key",
     type=str,
-    default=Header.default_key,
+    default=Config.default_auth_key,
 )
 @click.option(
     "-o",
