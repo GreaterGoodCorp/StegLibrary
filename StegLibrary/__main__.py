@@ -1,8 +1,9 @@
 # Builtin modules
 from os import path, getcwd
+from sys import stdout as std
 
 # Internal modules
-from StegLibrary.helper import err_imp
+from StegLibrary.helper import err_imp, raw_open
 from StegLibrary.core import SteganographyConfig as Config
 from StegLibrary.core.steg import write_steg, extract_steg
 from StegLibrary.gui import execute_gui
@@ -43,20 +44,26 @@ def steg():
     "--compress",
     help="Compression level of the steganograph",
     type=int,
-    default=9
+    default=Config.default_compression
 )
 @click.option(
     "-p",
     "--pack",
     help="Density of the steganograph (from 1 to 3)",
     type=int,
-    default=1
+    default=Config.default_density
 )
 @click.option(
     "-o",
     "--output",
     help="Path to output file",
     type=click.Path(False)
+)
+@click.option(
+    "--showim",
+    help="Whether to show image on creation",
+    type=bool,
+    default=False,
 )
 @click.argument("data", type=click.Path(True, True, False), required=True)
 def create(
@@ -65,6 +72,7 @@ def create(
     compress: int,
     pack: int,
     output: str,
+    showim: bool,
     data: str
 ):
     if pack not in Config.available_density:
@@ -88,7 +96,30 @@ def create(
         # Get the absolute path for the user-specified output file
         output = path.join(getcwd(), *path.split(output))
 
-    write_steg(data, image, key, compress, pack, output)
+    # Attempt to read files
+    try:
+        image_fileobject = raw_open(image)
+    except IOError:
+        raise click.FileError(image)
+    try:
+        data_fileobject = raw_open(data)
+    except IOError:
+        raise click.FileError(data)
+    try:
+        output_fileobject = raw_open(output)
+    except IOError:
+        raise click.FileError(output)
+
+    # Perform operation
+    write_steg(
+        data_fileobject,
+        image_fileobject,
+        output_fileobject,
+        auth_key=key,
+        compression=compress,
+        density=pack,
+        show_image_on_completion=showim,
+    )
 
 
 @steg.command(
@@ -130,7 +161,26 @@ def extract(key: str, output: str, stdout: bool, steganograph: str):
         # Default is the name of the steganograph, extension-stripped
         output = path.splitext(steganograph)[0]
 
-    extract_steg(steganograph, output, key, stdout)
+    # Attempt to read files
+    try:
+        steganograph_fileobject = raw_open(steganograph)
+    except IOError:
+        raise click.FileError(steganograph)
+    try:
+        output_fileobject = raw_open(output)
+    except IOError:
+        raise click.FileError(output)
+
+    # Compile output files
+    output_object = [output_fileobject]
+    if stdout:
+        output_object.append(std)
+
+    extract_steg(
+        steganograph_fileobject,
+        output_object,
+        auth_key=key,
+    )
 
 
 @steg.command(
