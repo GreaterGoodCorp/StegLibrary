@@ -88,23 +88,34 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.reset()
 
         # Ask user to choose a file
-        self.input_file = QtWidgets.QFileDialog.getOpenFileName()[0]
+        self.input_filename = QtWidgets.QFileDialog.getOpenFileName()[0]
 
         # If the user does not select any file
         # exit the routine
-        if self.input_file is None or len(self.input_file) == 0:
+        if self.input_filename is None or len(self.input_filename) == 0:
             return
 
         # Display text output
-        self.write_output("[User] File selected at: " + self.input_file)
+        self.write_output("[User] File selected at: " + self.input_filename)
 
         # Show the path to file
-        self.field_input.setText(self.input_file)
+        self.field_input.setText(self.input_filename)
+
+        # Attempt to load the file into memory
+        try:
+            self.input_fileobject = raw_open(self.input_filename)
+        except IOError as e:
+            self.write_output("[System] " + str(e.strerror))
+            return
 
         # Set correspongding status and text colours depending
         # on if it is a steganograph
         try:
-            header = steg.extract_steg(self.input_file, "", "", False, True)
+            # Attempt to parse as an Image
+            image_fileobject = Image.open(self.input_fileobject)
+
+            # Attempt to extract the header
+            header = extract_header(image_fileobject)
             self.write_output(
                 "[System] File selected is a valid steganograph." +
                 "Creation disabled!"
@@ -118,10 +129,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.spin_density.setValue(header["density"])
             # Enable widgets
             self.button_output.setEnabled(1)
-            self.write_output("[System] Steganograph is ready for extraction!")
+            self.write_output("[System] Steganograph is ready for extraction")
 
             self.has_steg = True
-        except:
+        except UnidentifiedImageError or UnrecognisedHeaderError:
             # If it is a normal file
             self.write_output(
                 "[System] File selected is not a steganograph. Extraction disabled!"
@@ -135,7 +146,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # Enable widgets
             self.button_image.setEnabled(1)
             self.button_output.setEnabled(1)
-            self.write_output("[System] File is ready for creation!")
+            self.write_output("[System] File is ready for creation")
 
             self.has_data = True
         self.enable_parametres()
