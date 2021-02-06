@@ -184,32 +184,24 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def select_output(self):
         # Ask user to choose a directory
-        self.output_file = QtWidgets.QFileDialog.getExistingDirectory()
+        self.output_filename = QtWidgets.QFileDialog.getExistingDirectory()
 
         # If the user does not select any file
         # exit the routine
-        if self.output_file is None or len(self.output_file) == 0:
+        if self.output_filename is None or len(self.output_filename) == 0:
             return
 
         # Display text output
         self.write_output("[User] Output folder selected at: " +
-                          self.output_file)
+                          self.output_filename)
 
         # Create default output file
-        self.output_file = path.join(
-            self.output_file,
-            path.splitext(path.split(self.input_file)[-1])[0])
+        self.output_filename = path.join(
+            self.output_filename,
+            path.splitext(path.split(self.input_filename)[-1])[0])
 
-        # Add numbering in case file already exists
-        ext = "" if self.has_steg else ".png"
-        if not steg.check_file_availability(self.output_file + ext):
-            i = 1
-            while not steg.check_file_availability(self.output_file + f"_{i}" +
-                                                   ext):
-                i += 1
-            self.output_file += f"_{i}" + ext
-        else:
-            self.output_file += ext
+        self.write_output(
+            "[System] Default output filename is: " + self.output_filename)
 
         self.write_output("[System] Default output filename is: " +
                           self.output_file)
