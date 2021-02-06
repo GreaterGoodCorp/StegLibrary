@@ -18,7 +18,7 @@ except ImportError:
     exit(1)
 
 try:
-from PyQt5 import QtWidgets
+    from PyQt5 import QtWidgets
 except ImportError:
     err_imp("PyQt5")
     exit(1)
@@ -258,15 +258,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def extract(self):
         self.print_system_status()
         self.write_output("[User] Start extracting steganograph...")
-        if len(self.field_authkey.text()) == 0:
-            self.field_authkey.setText(Header.default_key)
+        output = [self.output_fileobject]
+        if self.check_stdout.isChecked():
+            output.append(stdout)
         try:
-            steg.extract_steg(
-                self.input_file,
-                self.output_file,
-                self.field_authkey.text(),
-                False,
-                False,
+            extract_steg(
+                self.input_fileobject,
+                output,
+                auth_key=self.field_authkey.text(),
+                close_on_exit=False,
             )
         except SteganographyError:
             self.write_output("[System] Operation failed. Reverting...")
