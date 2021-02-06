@@ -234,25 +234,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def create(self):
         self.print_system_status()
         self.write_output("[User] Start creating steganograph...")
-        if len(self.field_authkey.text()) == 0:
-            self.field_authkey.setText(Header.default_key)
         try:
-            steg.write_steg(
-                self.input_file,
-                self.image_file,
-                self.field_authkey.text(),
-                self.spin_compress.value(),
-                self.spin_density.value(),
-                self.output_file,
+            write_steg(
+                self.input_fileobject,
+                self.image_fileobject,
+                self.output_fileobject,
+                auth_key=self.field_authkey.text(),
+                compression=self.spin_compress.value(),
+                density=self.spin_density.value(),
+                close_on_exit=False,
+                show_image_on_completion=self.check_showim.isChecked()
             )
         except SteganographyError as e:
-            self.write_output("[System] " + str(e))
-            self.write_output("Operation will be cancelled.")
+            self.write_output("[System] Operation failed. Reverting...")
             return
-
-        if self.check_showim.isChecked():
-            im = Image.open(self.output_file)
-            im.show()
 
         self.reset()
 
