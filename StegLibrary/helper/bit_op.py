@@ -101,3 +101,57 @@ def unset_bit(i: int, pos: int) -> int:
         # order to set bit at pos = 5, subtract n = 00100000 to i.
         # After this, the bit will be set (i = 10111001).
         return i - (1 << pos)
+
+
+def bitstr_from_int(
+    i: int,
+    length: Optional[int] = None
+) -> str:
+    """Returns binary representation of an integer
+
+    ### Positional arguments
+
+    - i (int)
+        - An integer
+    - length (int)
+        - The length of binary representation
+
+    ### Returns
+
+    A string of binary representation of the integer
+
+    ### Raises
+
+    - TypeError
+        - Raised when the parametres are of incorrect type
+
+    - ValueError
+        - Raised when length is less than the minimum length
+        of the string
+    """
+    # Type checking
+    if not isinstance(i, int):
+        raise TypeError(f"i must be integer (given {type(i)})")
+    if not (isinstance(length, int) or length is None):
+        raise TypeError("length must be integer or None " +
+                        f"(given {type(length)})")
+
+    # Make default length
+    # If length is None only
+    for length in count():
+        if (1 << length) - 1 >= i:
+            break
+
+    # Maximum value of n-bit integer is (1 << n) - 1 (when all bits are set)
+    # So check the number i with (1 << length) - 1
+    if i > (1 << length) - 1:
+        raise ValueError("Length is less than the minimum length required")
+
+    result_str = ""
+    # This thing works by checking the bit at the location (using is_bit_set())
+    # Then, prepend "1" or "0" as required.
+    for loc in range(length):
+        result_str = ("1" if is_bit_set(i, loc) else "0") + result_str
+
+    return result_str
+
