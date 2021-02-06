@@ -6,7 +6,7 @@ from webbrowser import open as webopen
 from StegLibrary import write_steg, extract_steg
 from StegLibrary.helper import err_imp, raw_open
 from StegLibrary.core.header import Header
-from StegLibrary.core.errors import UnrecognisedHeaderError
+from StegLibrary.core.errors import UnrecognisedHeaderError, SteganographyError
 from StegLibrary.core.steg import extract_header
 from StegLibrary.gui import Ui_MainWindow
 
