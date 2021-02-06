@@ -11,3 +11,4 @@ class SteganographyConfig(object):
 
     flag_close_on_exit = True
     flag_show_image_on_completion = False
+    flag_fopen_mode = "rb"
