@@ -2,6 +2,7 @@
 from .bit_op import is_bit_set, set_bit, unset_bit
 from .console_op import err_imp
 from .image_op import show_image
+from .file_op import raw_open
 
 # Define import * functionality
 # Import all only imports main API
@@ -11,5 +12,6 @@ __all__ = [
     "set_bit",
     "unset_bit",
     "err_imp",
-    "show_image"
+    "show_image",
+    "raw_open",
 ]
