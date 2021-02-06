@@ -250,11 +250,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 close_on_exit=False,
                 show_image_on_completion=self.check_showim.isChecked()
             )
-        except SteganographyError as e:
+        except SteganographyError:
             self.write_output("[System] Operation failed. Reverting...")
+            self.fallback()
             return
-
-        self.reset()
 
     def extract(self):
         self.print_system_status()
@@ -269,9 +268,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 False,
                 False,
             )
-        except SteganographyError as e:
-            self.write_output("[System] " + str(e))
-            self.write_output("Operation will be cancelled.")
+        except SteganographyError:
+            self.write_output("[System] Operation failed. Reverting...")
+            self.fallback()
             return
 
     def print_system_status(self):
@@ -353,3 +352,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def write_output(self, msg: str):
         self.text_output.appendPlainText(msg)
+
+    def fallback(self) -> None:
+        self.input_fileobject.close()
+        self.image_fileobject.close()
+        self.output_fileobject.close()
