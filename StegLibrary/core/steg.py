@@ -541,6 +541,7 @@ def extract_steg(
             )
         # After writing, close the files, unless disabled by
         # the caller
-        file.close()
+        if close_on_exit:
+            file.close()
 
     return True
