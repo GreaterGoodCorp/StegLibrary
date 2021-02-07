@@ -1,9 +1,13 @@
+# Builtin modules
+from typing import Union
+from io import RawIOBase, BufferedIOBase
+
 # Internal modules
 from StegLibrary.helper import err_imp
 
 # Non-builtin modules
 try:
-    from PIL import Image
+    from PIL import Image, UnidentifiedImageError
 except ImportError:
     err_imp("Pillow")
     exit(1)
