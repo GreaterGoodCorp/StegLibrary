@@ -3,7 +3,6 @@
 
 # Builtin modules
 from re import compile, Pattern
-from typing import Dict
 
 # Internal modules
 from StegLibrary.core import SteganographyConfig as Config
@@ -38,15 +37,6 @@ class Header:
     def __str__(self) -> str:
         """Returns the header."""
         return self.header
-
-    def __dict__(self) -> Dict[str]:
-        """Returns a dictionary of all metadata."""
-        return {
-            "data_length": self.data_length,
-            "compression": self.compression,
-            "density": self.density,
-            "salt": self.salt,
-        }
 
     def __repr__(self) -> str:
         """Same as __str__, returns the header."""
