@@ -53,6 +53,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.spin_compress.setValue(9)
         self.spin_density.setValue(1)
 
+        self.button_image.setDisabled(1)
+        self.button_output.setDisabled(1)
+
         self.check_showim.setChecked(0)
         self.check_stdout.setChecked(0)
 
