@@ -52,7 +52,7 @@ def open_image(file: Union[RawIOBase, BufferedIOBase]):
 
 
 def show_image(image: Image.Image) -> None:
-    """Show this Image object on screen
+    """Show this Image object on screen.
 
     ### Positional arguments
 
@@ -62,6 +62,11 @@ def show_image(image: Image.Image) -> None:
     ### Returns
 
     None
+
+    ### Raises
+
+    - TypeError
+        - Raised when the parametres are of incorrect types
     """
     # 1. Type guarding
     try:
