@@ -76,8 +76,6 @@ class Header:
         result_header = Header.separator.join(
             (str(self.data_length), str(flag), self.salt))
 
-        print(result_header)
-
         assert Header.pattern.match(result_header)
 
         # Assign as a class attribute
