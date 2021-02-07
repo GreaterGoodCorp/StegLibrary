@@ -248,7 +248,7 @@ class Ui_MainWindow(object):
         self.label_image.setText(_translate("MainWindow", "Path to image file"))
         self.label_input.setText(_translate("MainWindow", "Path to input file"))
         self.group_parametre.setTitle(_translate("MainWindow", "Parametres"))
-        self.check_stdout.setText(_translate("MainWindow", "Redirect output here on extraction (for text only)"))
+        self.check_stdout.setText(_translate("MainWindow", "Redirect output on extraction (for text only)"))
         self.group_action.setTitle(_translate("MainWindow", "Action"))
         self.button_create.setText(_translate("MainWindow", "Create"))
         self.button_create.setShortcut(_translate("MainWindow", "Meta+C"))

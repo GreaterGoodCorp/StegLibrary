@@ -262,7 +262,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Redirect output here on extraction (for text only)</string>
+          <string>Redirect output on extraction (for text only)</string>
          </property>
          <property name="checked">
           <bool>false</bool>

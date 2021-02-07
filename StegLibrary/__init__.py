@@ -1,5 +1,10 @@
-from . import helper
-from . import errors
-from .header import *
-from .steglib import *
-from .gui import execute_gui
+# Import expose API functions
+from .core import write_steg, extract_steg
+
+# Define import * functionality
+# Import all only imports main API
+# All other classes, objects must be imported by name
+__all__ = [
+    "write_steg",
+    "extract_steg",
+]
