@@ -1,8 +1,9 @@
 # StegLibrary
 
 ## Status
+
 | Name          | Status                                                                                                                    |
-|---------------|---------------------------------------------------------------------------------------------------------------------------|
+| ------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | PyPI version  | [![PyPi version](https://pypip.in/v/StegLibrary/badge.png)](https://crate.io/packages/StegLibrary/)                       |
 | PyPI download | [![PyPi download](https://pypip.in/d/StegLibrary/badge.png)](https://crate.io/packages/StegLibrary/)                      |
 | Build status  | [![Build Status](https://travis-ci.com/MunchDev/StegLibrary.svg?branch=main)](https://travis-ci.com/MunchDev/StegLibrary) |
@@ -32,6 +33,7 @@ pip install StegLibrary
 ```
 
 Via source (testing/development):
+
 ```
 git clone https://github.com/MunchDev/StegLibrary
 cd StegLibrary
@@ -68,7 +70,7 @@ import StegLibrary
 
 The two available functions for creating and extracting steganographs are as follow:
 
-* Creating steganographs
+- Creating steganographs
 
 ```python
 def write_steg(
@@ -136,7 +138,7 @@ def write_steg(
     """
 ```
 
-* Extracting steganographs
+- Extracting steganographs
 
 ```python
 def extract_steg(
@@ -194,8 +196,6 @@ def extract_steg(
 ### Command-line application
 
 The package is also designed to be invoked from the CLI. The interface is written using `Click`.
-
-#### Windows
 
 Usage: `python -m StegLibrary [OPTIONS] COMMAND [ARGS] ...`
 
