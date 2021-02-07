@@ -125,7 +125,7 @@ def write_steg(
     # This can return a bytes object or a NoneType.
     data = input_file.read()
     # 3. Check that the data is not None
-    if isinstance(data, None):
+    if data is None:
         raise InputFileError("Input file is not readable!")
     # 4. Check that the data is non-empty
     if len(data) == 0:
