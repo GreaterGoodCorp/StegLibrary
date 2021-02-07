@@ -1,6 +1,7 @@
 # Builtin modules
 from os import path, getcwd
 from sys import stdout as std
+from sys import argv
 
 # Internal modules
 from StegLibrary.helper import err_imp, raw_open, open_image
@@ -192,6 +193,5 @@ def gui():
 
 
 if __name__ == "__main__":
-    import sys
-    sys.argv[0] = "StegLibrary"
+    argv[0] = "StegLibrary"
     steg()

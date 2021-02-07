@@ -53,6 +53,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.spin_compress.setValue(9)
         self.spin_density.setValue(1)
 
+        self.button_image.setDisabled(1)
+        self.button_output.setDisabled(1)
+
         self.check_showim.setChecked(0)
         self.check_stdout.setChecked(0)
 
@@ -116,6 +119,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # Attempt to parse as an Image
             image_fileobject = Image.open(self.input_fileobject)
 
+            # Check if image is PNG
+            if image_fileobject.format != "png":
+                raise UnidentifiedImageError()
+
             # Attempt to extract the header
             header = extract_header(image_fileobject)
             self.write_output(
@@ -174,15 +181,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.image_fileobject = raw_open(self.image_filename)
             # Attempt to parse as an image
             Image.open(self.image_fileobject).close()
-        except IOError:
-            self.write_output(
-                "[System] Unable to open file: " + self.input_filename)
-            self.disable_parametres()
-            return
         except UnidentifiedImageError:
             self.label_image_status.setText("Invalid image")
             self.label_image_status.setStyleSheet("QLabel { color: red; }")
             self.write_output("[System] Selected image file is unidentified")
+            self.disable_parametres()
+            return
+        except IOError:
+            self.label_image_status.setText("Invalid file")
+            self.label_image_status.setStyleSheet("QLabel { color: red; }")
+            self.write_output(
+                "[System] Unable to open file: " + self.image_filename)
             self.disable_parametres()
             return
         else:

@@ -1,6 +1,10 @@
+# Builtin modules
+from io import RawIOBase, BufferedIOBase
+
 # Internal modules
 from StegLibrary.helper import err_imp
 from StegLibrary.helper import bit_op as bp
+from StegLibrary.helper import file_op as fp
 
 # Non-builtin modules
 try:
@@ -94,3 +98,13 @@ def test_int_from_bitstr():
     # Assert 5: Error handling
     with raises(TypeError):
         bp.int_from_bit_str(10101)
+
+
+def test_raw_open(tmpdir):
+    # Setup temporary file
+    with open(tmpdir.join("hello.txt"), "w") as f:
+        f.write("Hello")
+
+    # Assert 1: Open a normal file
+    assert isinstance(fp.raw_open(str(tmpdir.join("hello.txt"))),
+                      (RawIOBase, BufferedIOBase))
