@@ -139,6 +139,7 @@ def bitstr_from_int(
     # Make default length
     # If length is None only
     if length is None:
+        for length in count(1):
         if (1 << length) - 1 >= i:
             break
 
