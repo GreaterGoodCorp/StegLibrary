@@ -44,10 +44,10 @@ class Header:
 
     def __init__(self, data_length: int, compression: int, density: int,
                  salt: str) -> None:
-        self.data_length = data_length
-        self.compression = compression
-        self.density = density
-        self.salt = salt
+        self.data_length: int = data_length
+        self.compression: int = compression
+        self.density: int = density
+        self.salt: str = salt
 
         self.generate()
 
