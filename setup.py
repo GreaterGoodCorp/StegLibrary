@@ -17,6 +17,7 @@ setup(
         "click",
         "pytest",
         "PyQt5",
+        "cryptography",
     ],
     packages=find_packages(),
     platforms=["any"],
