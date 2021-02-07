@@ -71,63 +71,123 @@ The two available functions for creating and extracting steganographs are as fol
 * Creating steganographs
 
 ```python
-def write_steg(data_file: str, image_file: str, key: str, compression: int, density: int, output_file: str) -> bool:
-    """Write a steganograph
-       
-    * Positional arguments:
-    
-    data_file -- Path to data file
-       
-    image_file -- Path to image file
-       
-    key -- Authentication key
-       
-    compression -- Compression level
-       
-    density -- Density level
-       
-    output_file -- Path to output file
-       
-    * Raises:
-       
-    ImageFileValidationError: Raised when image validation failed
-       
-    DataFileValidationError: Raised when data validation failed
-       
-    InsufficientStorageError: Raised when there is insufficient storage
-       
-    UnavailableFileError: Raised when the output file already exists
-       
-    * Returns:
-       
-    True if a stegnograph has been successfully created and written on disks
+def write_steg(
+    input_file: Union[RawIOBase, BufferedIOBase],
+    image_file: Image.Image,
+    output_file: Union[RawIOBase, BufferedIOBase],
+    *,
+    auth_key: str = cfg.default_auth_key,
+    compression: int = cfg.default_compression,
+    density: int = cfg.default_density,
+    close_on_exit: bool = cfg.flag_close_on_exit,
+    show_image_on_completion: bool = cfg.flag_show_image_on_completion,
+) -> bool:
+    """Performs steaganography on input file and write data to image file.
+
+    ### Positional arguments
+
+    - input_file (RawIOBase | BufferedIOBase)
+        - A readable file-like object of the input file
+
+    - image_file (PIL.Image.Image)
+        - An opened image object
+
+    - output_file (RawIOBase | BufferedIOBase)
+        - A writable file-like object of the output file
+
+    ### Keyword arguments
+
+    - auth_key (str) (default = cfg.default_auth_key)
+        - The authentication key
+
+    - compression (int) (default = cfg.default_compression)
+        - The compression level
+
+    - density (int) (default = cfg.default_density)
+        - The data density
+
+    - close_on_exit (bool) (default = cfg.flag_close_on_exit)
+        - Whether to close the file objects on exit
+
+    - show_image_on_completion (bool)
+    (default = cfg.flag_show_image_on_completion)
+        - Whether to show image on completion
+
+    ### Return values
+
+    True if the operation is successful, otherwise False
+
+    ### Raises
+
+    - TypeError
+        - Raised when the parametres given are in incorrect types
+
+    - InputFileError
+        - Raised when there is an I/O error when trying to read
+        the input file
+
+    - OutputFileError
+        - Raised when there is an I/O error when trying to write
+        the output file
+
+    - InsufficientStorageError
+        - Raised when the input file contains more data than
+        the maximum storage
     """
 ```
 
 * Extracting steganographs
 
 ```python
-def extract_steg(steg_file: str, output_file: str, key: str, stdout: bool = False) -> bool:
-    """
-    Extracts data from steganograph.
-    
-    * Positional arguments:
-    
-    steg_file -- Path to steganograph
-    
-    output_file -- Path to output file
-    
-    key -- Authentication key
-    
-    stdout -- Send output to sys.stdout
-    
-    * Returns:
-    
-    True if the steganograph is extracted and written to disk successfully
-    
-    * Raises:
-    
-    HeaderError: Raised when the header of the stegnograph is invalid
+def extract_steg(
+    input_file: Union[RawIOBase, BufferedIOBase],
+    output_file: List[Union[RawIOBase, BufferedIOBase, TextIOBase]],
+    *,
+    auth_key: str = cfg.default_auth_key,
+    close_on_exit: bool = cfg.flag_close_on_exit,
+) -> bool:
+    """Extract steaganography on input file and write data to output file.
+
+    ### Positional arguments
+
+    - input_file (RawIOBase | BufferedIOBase)
+        - A readable file-like object of the input file
+
+    - output_file (List[RawIOBase | BufferedIOBase | TextIOBase])
+        - A list of writable file-like object(s) of the output file
+        - NOTE: If sys.stdout (or any TextIOBase) is given, output
+        will only be written if binary data can be decoded into string.
+
+    ### Keyword arguments
+
+    - auth_key (str) (default = cfg.default_auth_key)
+        - The authentication key
+
+    - close_on_exit (bool) (default = Config.flag_close_on_exit)
+        - Whether to close the file objects on exit
+
+    ### Return values
+
+    True if the operation is successful, otherwise False
+
+    ### Raises
+
+    - TypeError
+        - Raised when the parametres given are in incorrect types
+
+    - InputFileError
+        - Raised when there is an I/O error when trying to read
+        the input file
+
+    - OutputFileError
+        - Raised when there is an I/O error when trying to write
+        the output file
+
+    - UnrecognisedHeaderError
+        - Raised when failing to parse a header
+
+    - AuthenticationError
+        - Raised when the provided authentication key is invalid
     """
 ```
 
