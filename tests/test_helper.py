@@ -1,6 +1,10 @@
+# Builtin modules
+from io import RawIOBase, BufferedIOBase
+
 # Internal modules
 from StegLibrary.helper import err_imp
 from StegLibrary.helper import bit_op as bp
+from StegLibrary.helper import file_op as fp
 
 # Non-builtin modules
 try:
