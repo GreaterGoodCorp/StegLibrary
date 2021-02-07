@@ -5,7 +5,7 @@ with open("README.md", "r") as rm:
 
 setup(
     name="StegLibrary",
-    version="0.4.0",
+    version="1.0.0",
     author="Nguyen Thai Binh",
     author_email="binhnt.mdev@gmail.com",
     description="A package implementing and extending on steganography",
@@ -21,7 +21,7 @@ setup(
     packages=find_packages(),
     platforms=["any"],
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Environment :: Console",
         "Intended Audience :: Developers",
         "Intended Audience :: End Users/Desktop",
