@@ -106,14 +106,14 @@ def create(
     except IOError:
         raise click.FileError(data)
     try:
-        output_fileobject = raw_open(output)
+        output_fileobject = raw_open(output, "wb")
     except IOError:
         raise click.FileError(output)
 
     # Perform operation
     write_steg(
         data_fileobject,
-        image_fileobject,
+        open_image(image_fileobject),
         output_fileobject,
         auth_key=key,
         compression=compress,
