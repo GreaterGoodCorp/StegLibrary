@@ -2,7 +2,8 @@
 # create and maintain the header of each steganograph.
 
 # Builtin modules
-from re import compile
+from re import compile, Pattern
+from typing import Dict
 
 # Internal modules
 from StegLibrary.core import SteganographyConfig as Config
@@ -14,31 +15,31 @@ class Header:
 
     # Padding character, used when header is too short
     # after writing all the required metadata
-    padding_character = "-"
+    padding_character: str = "-"
 
     # Separator is used to make regex easier
-    separator = "?"
+    separator: str = "?"
 
     # Various types of length for the header
-    maximum_data_length = 8
-    maximum_flag_length = 3
-    salt_length = 24
-    separator_length = 2
-    header_length = maximum_data_length + \
+    maximum_data_length: int = 8
+    maximum_flag_length: int = 3
+    salt_length: int = 24
+    separator_length: int = 2
+    header_length: int = maximum_data_length + \
         maximum_flag_length + salt_length + separator_length
 
     # Regex pattern of the header
     # data_length?flag?salt
-    pattern = r"(\d{1,8})\?(\d{1,3})\?"
-    hash_pattern = r"((?:[A-Za-z0-9+/]{4})+(?:[A-Za-z0-9+/]{2}==" + \
+    pattern: str = r"(\d{1,8})\?(\d{1,3})\?"
+    hash_pattern: str = r"((?:[A-Za-z0-9+/]{4})+(?:[A-Za-z0-9+/]{2}==" + \
         r"|[A-Za-z0-9+/]{3}=)?)"
-    pattern = compile(f"^{pattern + hash_pattern}$")
+    pattern: Pattern = compile(f"^{pattern + hash_pattern}$")
 
     def __str__(self) -> str:
         """Returns the header."""
         return self.header
 
-    def __dict__(self) -> dict:
+    def __dict__(self) -> Dict[str]:
         """Returns a dictionary of all metadata."""
         return {
             "data_length": self.data_length,
