@@ -3,7 +3,7 @@ from os import path, getcwd
 from sys import stdout as std
 
 # Internal modules
-from StegLibrary.helper import err_imp, raw_open
+from StegLibrary.helper import err_imp, raw_open, open_image
 from StegLibrary.core import SteganographyConfig as Config
 from StegLibrary.core.steg import write_steg, extract_steg
 from StegLibrary.gui import execute_gui
