@@ -140,8 +140,8 @@ def bitstr_from_int(
     # If length is None only
     if length is None:
         for length in count(1):
-        if (1 << length) - 1 >= i:
-            break
+            if (1 << length) - 1 >= i:
+                break
 
     # Maximum value of n-bit integer is (1 << n) - 1 (when all bits are set)
     # So check the number i with (1 << length) - 1
@@ -181,12 +181,16 @@ def int_from_bit_str(s: str) -> int:
     if not isinstance(s, str):
         raise TypeError(f"Must be a string (given {type(s)})")
 
+    # Remove extra 0 at the front
+    s = s.lstrip("0")
+
     # Consume bit-by-bit of the string
     # Then add to result 1 << bit (2 ** bit)
+    length = len(s)
     result = 0
-    for loc in range(len(s)):
+    for loc in range(length):
         if s[loc] not in ("0", "1"):
-            raise ValueError(f"String contains invalid character: '{s[loc]}")
-        result += int(s[loc]) << loc
+            raise ValueError(f"String contains invalid character: '{s[loc]}'")
+        result += int(s[loc]) << (length - loc - 1)
 
     return result
