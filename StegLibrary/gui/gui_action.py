@@ -119,6 +119,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # Attempt to parse as an Image
             image_fileobject = Image.open(self.input_fileobject)
 
+            # Check if image is PNG
+            if image_fileobject.format != "png":
+                raise UnidentifiedImageError()
+
             # Attempt to extract the header
             header = extract_header(image_fileobject)
             self.write_output(
