@@ -31,7 +31,7 @@ class Header:
     # data_length?flag?salt
     pattern = r"(\d{1,8})\?(\d{1,3})\?"
     hash_pattern = r"((?:[A-Za-z0-9+/]{4})+(?:[A-Za-z0-9+/]{2}==" + \
-        r"|[A-Za-z0-9+/]{3}=)?){24}"
+        r"|[A-Za-z0-9+/]{3}=)?)"
     pattern = compile(f"^{pattern + hash_pattern}$")
 
     def __str__(self) -> str:
@@ -74,7 +74,9 @@ class Header:
         flag = (self.compression << 2) + self.density
 
         result_header = Header.separator.join(
-            (str(self.data_length), str(flag), hash))
+            (str(self.data_length), str(flag), self.salt))
+
+        print(result_header)
 
         assert Header.pattern.match(result_header)
 
