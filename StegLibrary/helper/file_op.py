@@ -1,7 +1,9 @@
+# Builtin modules
 from io import RawIOBase, BufferedIOBase
 from typing import Union
 from os import path
 
+# Internal modules
 from StegLibrary.core import SteganographyConfig as Config
 
 
