@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report to help me improve
 title: "[Bug report] "
-labels: ''
+labels: bug-critical, priority-high
 assignees: MunchDev
 
 ---
