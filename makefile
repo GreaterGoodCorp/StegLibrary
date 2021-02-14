@@ -47,7 +47,6 @@ clean-build:
 
 clean-pyc:
 	find . -name "*.pyc" -exec rm -rf {} +
-	find . -name "*.pyi" -exec rm -rf {} +
 	find . -name "__pycache__" -exec rm -rf {} +
 
 clean-test:
