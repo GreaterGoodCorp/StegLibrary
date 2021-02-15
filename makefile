@@ -1,53 +1,32 @@
-PYTHON = python3
+# Use external virtual environment manager
+include Makefile.venv
+Makefile.venv:
+	curl \
+		-o Makefile.fetched \
+		-L "https://github.com/sio/Makefile.venv/raw/v2020.08.14/Makefile.venv"
+	echo "5afbcf51a82f629cd65ff23185acde90ebe4dec889ef80bbdc12562fbd0b2611 *Makefile.fetched" \
+		| shasum -a 256 --check - \
+		&& mv Makefile.fetched Makefile.venv
 
-PIP = pip3
-
-.PHONY = help prepare clean clean-build clean-pyc clean-test
-
-.DEFAULT_GOAL = help
-
-help:
-	@echo "-------------------------HELP-------------------------"
-	@echo "To prepare for development, type 'make prepare'"
-	@echo "To test the program, type 'make test'"
-	@echo "To translate UI file, type 'make ui'"
-	@echo "To run the GUI, type 'make gui'"
-	@echo "To build package, type 'make build'"
-	@echo "To upload tp PyPi, type 'make upload'"
-	@echo "To clean up everything, type 'make clean'"
-	@echo "-------------------------HELP-------------------------"
-
-prepare:
-	${PYTHON} -m venv .venv
-	. .venv/bin/activate
-	${PYTHON} -m pip install --upgrade pip
-	${PIP} install -r requirements.txt
-	${PIP} install pytest
-	${PIP} install twine wheel
-
-test:
-	pytest
-
-ui:
+# GUI building/executing
+ui: venv
 	pyuic5 StegLibrary/gui/gui.ui -o StegLibrary/gui/gui.py
 
 gui: ui
-	${PYTHON} -m StegLibrary gui
+	${VENV}/python3 -m StegLibrary gui
 
-build: clean-build
-	${PYTHON} setup.py sdist bdist_wheel
-
-upload: build
-	${PYTHON} -m twine upload dist/*
-
-clean: clean-build clean-pyc clean-test
-
-clean-build:
+# Cleanup everything
+clean: clean-venv
 	rm -rf build/ dist/ *.egg-info
-
-clean-pyc:
 	find . -name "*.pyc" -exec rm -rf {} +
 	find . -name "__pycache__" -exec rm -rf {} +
-
-clean-test:
 	rm -rf .pytest_cache
+
+# Project testing
+test: ${VENV}/pytest
+	pytest
+
+# Upload project to PyPI
+upload: clean ${VENV}/twine ${VENV}/wheel
+	${VENV}/python3 setup.py sdist bdist_wheel
+	${VENV}/python3 -m twine upload dist/*
