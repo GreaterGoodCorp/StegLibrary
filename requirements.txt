@@ -3,3 +3,4 @@ Pillow
 PyQt5
 cryptography
 flask
+python-dotenv
