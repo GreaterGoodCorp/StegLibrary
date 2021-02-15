@@ -4,3 +4,6 @@ PyQt5
 cryptography
 flask
 python-dotenv
+pytest
+twine
+wheel
