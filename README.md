@@ -27,14 +27,14 @@ Before installation, please make sure `python3` (version >= 3.7) is installed on
 
 Via `pip` (production):
 
-```
+```bash
 python -m pip install --upgrade pip
 pip install StegLibrary
 ```
 
 Via source (testing/development):
 
-```
+```bash
 git clone https://github.com/MunchDev/StegLibrary
 cd StegLibrary
 pip install -r requirements.txt
@@ -200,3 +200,43 @@ The package is also designed to be invoked from the CLI. The interface is writte
 Usage: `python -m StegLibrary [OPTIONS] COMMAND [ARGS] ...`
 
 Help message can be printed by running `python -m StegLibrary --help`
+
+### StegLibrary GUI
+
+This project comes with a simple GUI (written in the Python implementation of `PyQt5`). The graphical
+
+interface provides a more traditional and user-friendly way to use this library. The documentation for
+
+the GUI is not written, since I believe most are quite self-explanatory. However, if you found it difficult
+
+to use, please open an issue and I will look into it!
+
+## Contribution
+
+Since this is more like a personal and hobby-ist project, I am not expecting any serious contribution. There
+
+are so many things I can improve here. However, if you believe there is an improvement I should absolutely
+
+consider, please just open an issue and we can discuss what to do! Please take note that issues requesting
+
+new features will hardly be entertained!
+
+## Changelog
+
+1. Before version 1.0.0:
+
+    - Added basic implementation for algorithm regarding writing and extracting steganography
+
+    - Added a basic CLI to use the library without writing any Python code
+
+2. Version 1.0.0:
+
+    - Added complete implementation for all algorithms
+
+    - Added a complete CLI and GUI for writing and extracting steganography
+
+    - Fixed a few internal bugs that caused the GUI to crash randomly
+
+3. Version 1.0.1:
+
+    - Fixed a bug regarding vulnerability of dependencies
