@@ -16,7 +16,7 @@ gui: ui
 	${VENV}/python3 -m StegLibrary gui
 
 # Cleanup everything
-clean: clean-venv
+clean:
 	rm -rf build/ dist/ *.egg-info
 	find . -name "*.pyc" -exec rm -rf {} +
 	find . -name "__pycache__" -exec rm -rf {} +
