@@ -1,11 +1,10 @@
-language: python
-jobs:
-  include:
-    - name: "Linux"
-      python: 3.9
-    - name: "MacOS"
-      os: osx
-      osx_image: xcode12.2
-      language: shell
+anguage: python
+python:
+  - "3.6"
+  - "3.7"
+  - "3.8"
+  - "3.9"
+install:
+  - echo "No installation required!"
 script:
   - make test
