@@ -1,10 +1,12 @@
-anguage: python
+os: linux
+dist: xenial
+language: python
 python:
   - "3.6"
   - "3.7"
   - "3.8"
   - "3.9"
 install:
-  - echo "No installation required!"
+  - make venv
 script:
   - make test
