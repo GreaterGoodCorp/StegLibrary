@@ -21,7 +21,7 @@ please stop reading, otherwise please go ahead and read this entire file.
 
 ## Installation
 
-Before installation, please make sure `python3` (version >= 3.6) is installed on your machine.
+Before installation, please make sure `python3` (version >= 3.7) is installed on your machine.
 
 ### Windows
 
