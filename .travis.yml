@@ -7,7 +7,5 @@ jobs:
       os: osx
       osx_image: xcode12.2
       language: shell
-install:
-  - make prepare
 script:
   - make test
